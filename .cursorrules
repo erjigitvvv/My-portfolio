@@ -1,0 +1,5 @@
+Read PROJECT_SPEC.md and DESIGN_SPEC.md first before writing or modifying any code. DESIGN_SPEC.md takes precedence on visual design.
+Work ONE stage at a time as defined in PROJECT_SPEC.md (Section 11) and DESIGN_SPEC.md (Section 7).
+After each stage, stop, summarize what changed, and explain how to test it. Do not start the next stage until the owner says "davom et".
+Code, identifiers, file names, and comments must be in English. User-facing text must be bilingual (uz/en). Responses to the owner must be in Uzbek.
+Never commit secrets. Never hardcode database content.

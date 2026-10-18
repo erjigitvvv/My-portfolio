@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "skills": "Tech Stack",
+    "projects": "Case Studies",
+    "blog": "Blog & CTF",
+    "certificates": "Certificates",
+    "resources": "Resources",
+    "speaking": "Speaking",
+    "contact": "Contact",
+    "privacy": "Privacy & Sec",
+    "admin": "Admin Panel",
+    "terminal": "AI / Terminal"
+  },
+  "hero": {
+    "badge": "SYSTEM OPERATIONAL: 99.98% • ZERO-TRUST VERIFIED",
+    "greeting": "Hello, I am",
+    "ctaProjects": "Explore Case Studies",
+    "ctaContact": "Encrypted Contact",
+    "ctaTerminal": "Launch Terminal (Ctrl+K)",
+    "downloadCv": "Download CV (PDF)",
+    "stats": {
+      "exp": "Years Experience",
+      "projects": "Production Systems",
+      "audits": "Security Audits & Pentests",
+      "certs": "Global Certifications"
+    }
+  },
+  "telemetry": {
+    "title": "Live Telemetry & Engineering Ecosystem",
+    "subtitle": "Real-time metrics across autonomous AI pipelines, Kubernetes clusters, and security posture",
+    "aiTitle": "Neural RAG & LLM Sandbox",
+    "aiDesc": "Query the embedded AI agent trained on my architecture, audits, and engineering history",
+    "secTitle": "Cybersecurity Posture & Threat Radar",
+    "devopsTitle": "Kubernetes & GitOps Telemetry",
+    "githubTitle": "GitHub & WakaTime Activity"
+  },
+  "sections": {
+    "featuredProjects": "Featured Architecture Case Studies",
+    "featuredProjectsSub": "Production-grade AI agents, Zero-Trust security platforms, and cloud-native infrastructure",
+    "viewAll": "View All",
+    "skillsTitle": "Engineering Stack & Tech Radar",
+    "skillsSub": "Deep technical mastery across the AI Engineering, Cybersecurity, and DevOps triad",
+    "timelineTitle": "Career & Engineering Timeline",
+    "timelineSub": "Key leadership roles, enterprise deployments, and academic research",
+    "latestPosts": "Engineering Blog & Security Write-ups",
+    "latestPostsSub": "In-depth research on LLM security, Linux eBPF, Kubernetes hardening, and MLOps",
+    "certsTitle": "Verified Global Certifications",
+    "speakingTitle": "Keynotes, Conferences & Workshops",
+    "resourcesTitle": "Open-Source Blueprints & Security Checklists",
+    "contactTitle": "Encrypted Communication Channel",
+    "contactSub": "Reach out for enterprise AI consulting, Red Team security audits, or cloud architecture"
+  },
+  "common": {
+    "all": "All Domains",
+    "ai": "AI & MLOps",
+    "cyber": "Cybersecurity",
+    "devops": "DevOps & Cloud",
+    "core": "Core Systems",
+    "readMore": "Read Case Study",
+    "architecture": "System Architecture",
+    "metrics": "Impact & Metrics",
+    "sourceCode": "Source Code",
+    "liveDemo": "Live Deployment",
+    "views": "views",
+    "minRead": "min read",
+    "verified": "Verified Credential",
+    "download": "Download Blueprint",
+    "send": "Transmit Message",
+    "sending": "Transmitting...",
+    "sentSuccess": "Message securely stored and dispatched via encrypted Telegram webhook!"
+  }
+}

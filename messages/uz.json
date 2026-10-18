@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "home": "Bosh sahifa",
+    "about": "Men haqimda",
+    "skills": "Ko'nikmalar",
+    "projects": "Loyihalar",
+    "blog": "Blog & CTF",
+    "certificates": "Sertifikatlar",
+    "resources": "Resurslar",
+    "speaking": "Ma'ruzalar",
+    "contact": "Aloqa",
+    "privacy": "Maxfiylik",
+    "admin": "Admin Panel",
+    "terminal": "AI / Terminal"
+  },
+  "hero": {
+    "badge": "TIZIM FAOLLIGI: 99.98% • ZERO-TRUST HIMOYALANGAN",
+    "greeting": "Salom, men",
+    "ctaProjects": "Arxitektura va Loyihalar",
+    "ctaContact": "Xavfsiz Aloqa",
+    "ctaTerminal": "Interaktiv Terminal (Ctrl+K)",
+    "downloadCv": "Rezyume (PDF)",
+    "stats": {
+      "exp": "Yillik Tajriba",
+      "projects": "Production Loyihalar",
+      "audits": "Kiber-Audit & Pentest",
+      "certs": "Xalqaro Sertifikatlar"
+    }
+  },
+  "telemetry": {
+    "title": "Jonli Telemetriya va Ekotizim",
+    "subtitle": "AI modellari, Kubernetes klasterlar va kiberxavfsizlik radarining real-vaqtdagi ko'rsatkichlari",
+    "aiTitle": "Neural RAG & LLM Sandbox",
+    "aiDesc": "Mening arxitekturam va tajribam bo'yicha AI-agentga tezkor savol bering",
+    "secTitle": "Kiberxavfsizlik Holati (Security Posture)",
+    "devopsTitle": "Kubernetes & GitOps Telemetriya",
+    "githubTitle": "GitHub & WakaTime Faollik"
+  },
+  "sections": {
+    "featuredProjects": "Tanlangan Arxitektura Case-Studylar",
+    "featuredProjectsSub": "Yuqori yuklamali AI tizimlari, Zero-Trust xavfsizlik va bulutli DevOps yechimlari",
+    "viewAll": "Barchasini ko'rish",
+    "skillsTitle": "Muhandislik Steki va Tech Radar",
+    "skillsSub": "AI Muhandisligi, Kiberxavfsizlik va DevOps uchburchagidagi chuqur texnik ko'nikmalar",
+    "timelineTitle": "Karyera va Tajriba Xronologiyasi",
+    "timelineSub": "Enterprise kompaniyalar va ilmiy tadqiqotlardagi asosiy bosqichlar",
+    "latestPosts": "Muhandislik Blogi va CTF Tahlillar",
+    "latestPostsSub": "AI xavfsizligi, Linux eBPF, Kubernetes va MLOps bo'yicha maqolalar",
+    "certsTitle": "Tasdiqlangan Xalqaro Sertifikatlar",
+    "speakingTitle": "Konferensiya va Ma'ruzalar",
+    "resourcesTitle": "Ochiq Kodli Vositalar va Shablonlar",
+    "contactTitle": "Shifrlangan Aloqa Markazi",
+    "contactSub": "Loyiha, xavfsizlik auditi yoki AI arxitektura bo'yicha maslahat uchun xabar qoldiring"
+  },
+  "common": {
+    "all": "Barchasi",
+    "ai": "AI & MLOps",
+    "cyber": "Kiberxavfsizlik",
+    "devops": "DevOps & Cloud",
+    "core": "Asosiy Dasturlash",
+    "readMore": "Batafsil o'qish",
+    "architecture": "Tizim Arxitekturasi",
+    "metrics": "Natija va Metrikalar",
+    "sourceCode": "GitHub Kod",
+    "liveDemo": "Jonli Demo",
+    "views": "ko'rildi",
+    "minRead": "daq o'qish",
+    "verified": "Tasdiqlangan",
+    "download": "Yuklab olish",
+    "send": "Xabarni Yuborish",
+    "sending": "Yuborilmoqda...",
+    "sentSuccess": "Xabaringiz muvaffaqiyatli saqlandi va Telegram bot orqali yetkazildi!"
+  }
+}
