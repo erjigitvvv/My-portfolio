@@ -180,10 +180,14 @@ export function Header({ locale }: { locale: string }) {
         <Link
           href={`/${locale}`}
           aria-label="Erjigitov Mirhamid Home"
-          className="clear-liquid-glass liquid-card-sheen pointer-events-auto inline-flex items-center gap-2 rounded-pill px-3 sm:px-3.5 py-2 font-mono text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--accent)]"
+          className="clear-liquid-glass liquid-card-sheen pointer-events-auto inline-flex items-center gap-2.5 rounded-pill px-2.5 sm:px-3.5 py-1.5 font-mono text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--accent)]"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--accent)] font-poster text-[10px] font-black text-[#0B0B0B]">
-            EM
+          <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-sky-400/60 bg-slate-950 shadow-[0_0_12px_rgba(56,189,248,0.45)]">
+            <img
+              src="/avatar/cyborg-profile.png"
+              alt="Erjigitov Mirhamid Avatar"
+              className="h-full w-full object-cover object-top scale-125"
+            />
           </span>
           <span className="hidden sm:inline tracking-tight">Erjigitov Mirhamid</span>
         </Link>
@@ -267,8 +271,12 @@ export function Header({ locale }: { locale: string }) {
                     onClick={() => setDrawerOpen(false)}
                     className="flex items-center gap-3"
                   >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--accent)] font-poster text-base font-black text-[#0B0B0B] shadow-md">
-                      EM
+                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-sky-400/50 bg-slate-950 shadow-[0_0_16px_rgba(56,189,248,0.35)]">
+                      <img
+                        src="/avatar/cyborg-profile.png"
+                        alt="Erjigitov Mirhamid Avatar"
+                        className="h-full w-full object-cover object-top scale-125"
+                      />
                     </div>
                     <div>
                       <p className="font-poster text-sm sm:text-base font-black tracking-tight text-[var(--ink)]">
