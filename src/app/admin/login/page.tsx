@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Shield, Lock, KeyRound, ArrowRight, Sparkles } from "lucide-react";
+import { Shield, Lock, ArrowRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@cyberai.dev");
-  const [password, setPassword] = useState("CyberAdmin2026!Secure");
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +35,9 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push("/admin");
+      const cb = searchParams.get("callbackUrl");
+      // only same-site admin paths are allowed (prevents open redirect)
+      router.push(cb && cb.startsWith("/admin") && !cb.startsWith("//") ? cb : "/admin");
       router.refresh();
     } catch {
       setError("Authentication server unreachable");
@@ -68,6 +71,7 @@ export default function AdminLoginPage() {
               </label>
               <input
                 type="email"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -81,6 +85,7 @@ export default function AdminLoginPage() {
               </label>
               <input
                 type="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -106,16 +111,6 @@ export default function AdminLoginPage() {
               <ArrowRight className="h-4 w-4" />
             </Button>
 
-            <div className="rounded-xl border border-white/10 bg-slate-950/60 p-3 font-mono text-[11px] text-slate-400 space-y-1">
-              <div className="flex items-center justify-between text-emerald-400">
-                <span className="flex items-center gap-1">
-                  <KeyRound className="h-3.5 w-3.5" /> Pre-filled Demo Credentials:
-                </span>
-                <Sparkles className="h-3.5 w-3.5" />
-              </div>
-              <p>Email: admin@cyberai.dev</p>
-              <p>Pass: CyberAdmin2026!Secure</p>
-            </div>
           </form>
         </GlassCard>
 
@@ -129,5 +124,14 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  // useSearchParams() requires a Suspense boundary for static prerendering.
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

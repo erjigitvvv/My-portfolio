@@ -2,16 +2,16 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, FileDown } from "lucide-react";
+import { ArrowRight, Cpu, Server, ShieldCheck, Sparkles } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
-import { BracketLabel, DoodleArrow, SparkleSticker } from "../ui/Stickers";
-import { CyborgAvatarRig } from "./CyborgAvatarRig";
+import { GlassCard } from "../ui/GlassCard";
+import { DoodleArrow, SparkleSticker } from "../ui/Stickers";
 import { getDictionary, localizeField } from "@/i18n/messages";
 
 /**
- * Poster-style Hero Header section over the perspective room grid + Multi-Layer 3D Cyborg Avatar Rig
- * Custom tailored for Erjigitov Mirhamid (MIRHAMID / ERJIGITOV *26)
+ * Prestige visionOS Spatial UI Hero.
+ * Features 3D Hologram Avatar on the right side and live telemetry.
  */
 export function Hero({
   profile,
@@ -22,142 +22,137 @@ export function Hero({
 }) {
   const dict = getDictionary(locale);
 
-  const rawLine1 = localizeField(profile, "heroLine1", locale);
-  const rawLine2 = localizeField(profile, "heroLine2", locale);
-
-  const heroLine1 =
-    !rawLine1 || rawLine1 === "SARDORBEK" ? "MIRHAMID" : rawLine1;
-  const heroLine2 =
-    !rawLine2 || rawLine2.includes("ALIMOV") ? "ERJIGITOV *26" : rawLine2;
-
-  const availability =
-    localizeField(profile, "availability", locale) ||
-    (locale === "en" ? "Open to work*" : "Loyihalarga ochiq*");
-  const rolePill =
-    localizeField(profile, "rolePill", locale) ||
-    (locale === "en"
-      ? "AI • CYBERSECURITY • DEVOPS"
-      : "AI • KIBERXAVFSIZLIK • DEVOPS");
+  const heroLine1 = localizeField(profile, "heroLine1", locale);
+  const heroLine2 = localizeField(profile, "heroLine2", locale);
+  const availability = localizeField(profile, "availability", locale);
+  const rolePill = localizeField(profile, "rolePill", locale);
   const bio = localizeField(profile, "bio", locale);
 
-  let specialties: string[] = [];
-  try {
-    const rawSpec = localizeField(profile, "specialties", locale);
-    specialties = rawSpec ? JSON.parse(rawSpec) : [];
-  } catch {
-    specialties = [];
-  }
-
-  if (specialties.length === 0) {
-    specialties =
-      locale === "en"
-        ? [
-            "01 / Autonomous AI & RAG Systems",
-            "02 / Offensive Security & Pentesting",
-            "03 / Zero-Trust Kubernetes (CKS)",
-            "04 / DevSecOps & Cloud Architecture",
-          ]
-        : [
-            "01 / Avtonom AI & RAG Tizimlari",
-            "02 / Kiberxavfsizlik & Pentest (OSCP)",
-            "03 / Zero-Trust Kubernetes (CKS)",
-            "04 / DevSecOps & Bulutli Arxitektura",
-          ];
-  }
-
   return (
-    <section id="hero" className="relative scroll-mt-24 pt-4 pb-12">
-      <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
-        {/* Left Column: Poster Typography, Pills, Doodle Arrow & Sticker */}
-        <div className="space-y-6 lg:col-span-7">
-          <div className="flex flex-wrap items-center gap-3">
-            <BracketLabel>ERJIGITOV MIRHAMID // 2026</BracketLabel>
-            <span className="font-mono text-xs text-[var(--muted)]">
-              • OʻZBEKISTON / REMOTE WORLDWIDE
-            </span>
-          </div>
-
+    <section id="hero" className="relative scroll-mt-24 min-h-[90vh] lg:min-h-screen flex flex-col justify-center py-20 lg:py-28 overflow-visible">
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 relative z-10 overflow-visible">
+        {/* Left Column: Poster Typography & CTA */}
+        <div className="space-y-8 lg:col-span-7 overflow-visible">
           {/* Giant Uppercase Poster Display Lines with clamp() */}
           <div className="space-y-1">
             <h1
-              className="font-poster font-black text-[var(--ink)] tracking-tight"
-              style={{ fontSize: "clamp(2.5rem, 6.8vw, 6rem)" }}
+              className="font-poster font-black text-[var(--ink)] tracking-tight leading-none select-none"
+              style={{ fontSize: "clamp(3.2rem, 7.5vw, 6.8rem)" }}
             >
               <span className="block">{heroLine1}</span>
               <span className="block">
                 {heroLine2.replace("*", "")}
-                <span className="text-[var(--accent-text)]">*</span>
+                {heroLine2.includes("*") && (
+                  <span className="text-[var(--accent-text)]">*</span>
+                )}
               </span>
             </h1>
           </div>
 
           {/* Green Status Pill + Role Pill + Doodle Arrow & Sticker */}
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            <Badge variant="accent" pulse className="px-4 py-1.5 text-xs sm:text-sm">
-              {availability}
-            </Badge>
-            <Badge variant="default" className="px-4 py-1.5 text-xs sm:text-sm">
-              {rolePill}
-            </Badge>
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            {availability && (
+              <Badge variant="accent" pulse className="px-4 py-1.5 text-xs sm:text-sm">
+                {availability}
+              </Badge>
+            )}
+            {rolePill && (
+              <Badge variant="default" className="px-4 py-1.5 text-xs sm:text-sm">
+                {rolePill}
+              </Badge>
+            )}
             <DoodleArrow className="hidden sm:block" />
-            <SparkleSticker label="Erjigitov Mirhamid" variant="peach" />
+            <SparkleSticker label={profile.name} variant="peach" />
           </div>
 
           <p className="max-w-xl text-base sm:text-lg text-[var(--muted)] leading-relaxed">
             {bio}
           </p>
 
-          {/* CTA Pill Buttons */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          {/* Primary CTA Button */}
+          <div className="relative inline-block pt-3 pb-8 pr-8 overflow-visible">
+            <div
+              className="absolute inset-x-2 bottom-4 top-4 rounded-full bg-[var(--accent)]/30 blur-xl pointer-events-none transition-all duration-300"
+              aria-hidden="true"
+            />
             <Link href={`/${locale}/projects`}>
-              <Button variant="primary" size="lg">
+              <Button variant="primary" size="lg" className="clay-btn-primary group relative">
                 <span>{dict.hero.ctaProjects}</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link href={`/${locale}/contact`}>
-              <Button variant="ink" size="lg">
-                <span>{dict.hero.ctaContact}</span>
-              </Button>
-            </Link>
-            <a
-              href={
-                locale === "en"
-                  ? profile.cvUrl_en || "/cv-en.pdf"
-                  : profile.cvUrl_uz || "/cv-uz.pdf"
-              }
-              download
-            >
-              <Button variant="glass" size="lg">
-                <FileDown className="h-4 w-4 text-[var(--accent-text)]" />
-                <span>{dict.hero.downloadCv}</span>
-              </Button>
-            </a>
           </div>
         </div>
 
-        {/* Right Column: Extracted Multi-Layer 3D Cyborg Avatar Rig */}
-        <div className="relative flex items-center justify-center lg:col-span-5">
-          <CyborgAvatarRig locale={locale} />
-        </div>
-      </div>
-
-      {/* Bottom 4 Specialty Rows with Thin Vertical Dividers */}
-      <div className="liquid-glass mt-12 grid grid-cols-1 rounded-2xl sm:grid-cols-2 lg:grid-cols-4">
-        {specialties.slice(0, 4).map((item, idx) => (
-          <div
-            key={idx}
-            className={`py-4 px-5 font-mono text-xs sm:text-sm font-medium text-[var(--ink)] ${
-              idx > 0
-                ? "sm:border-l border-t sm:border-t-0 border-[var(--line)]/60"
-                : ""
-            }`}
+        {/* Right Column: Spatial Telemetry Glass Monitor */}
+        <div className="lg:col-span-5 flex flex-col justify-center overflow-visible">
+          <GlassCard
+            variant="spatial"
+            glow
+            magnetic
+            padding="lg"
+            className="space-y-6"
           >
-            {item}
-          </div>
-        ))}
+            <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-4">
+              <span className="font-mono text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
+                SYSTEM TELEMETRY // SPATIAL NODE
+              </span>
+              <span className="inline-flex items-center gap-2 font-mono text-[11px] text-[var(--accent-text)] font-bold">
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent)]" />
+                ONLINE
+              </span>
+            </div>
+
+            <div className="space-y-4 font-mono text-xs">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-[var(--muted)]">
+                  <Server className="w-3.5 h-3.5 text-[var(--accent)]" />
+                  Cluster
+                </span>
+                <span className="font-bold text-[var(--ink)]">
+                  k8s-prod-us-east
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-[var(--muted)]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent)]" />
+                  Zero-Trust
+                </span>
+                <span className="font-bold text-[var(--ink)]">
+                  mTLS / eBPF Active
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-[var(--muted)]">
+                  <Cpu className="w-3.5 h-3.5 text-[var(--accent)]" />
+                  Latency
+                </span>
+                <span className="font-bold text-[var(--accent-text)]">
+                  12ms
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[var(--muted)]">SLA Uptime</span>
+                <span className="font-bold text-[var(--ink)]">
+                  99.99%
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-[var(--line)]/40">
+              <Link
+                href={`/${locale}/about`}
+                className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[var(--accent-text)] hover:underline"
+              >
+                <span>Read Full Engineering Dossier →</span>
+              </Link>
+            </div>
+          </GlassCard>
+        </div>
       </div>
     </section>
   );
 }
-

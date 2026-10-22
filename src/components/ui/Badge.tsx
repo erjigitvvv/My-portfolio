@@ -45,10 +45,10 @@ export function Badge({
     variant === "accent" || variant === "live" || variant === "cyber";
 
   const variantClasses = isAccentFill
-    ? "bg-[var(--accent)] text-[var(--accent-ink)] border-transparent font-semibold"
+    ? "bg-[var(--accent)] text-[var(--accent-ink)] border-transparent font-semibold shadow-[0_2px_10px_rgba(61,190,116,0.3)]"
     : variant === "peach"
-    ? "bg-[var(--peach)] text-[#0B0B0B] border-transparent font-semibold"
-    : "glass-surface text-[var(--ink)]";
+    ? "bg-[var(--peach)] text-[#0B0B0B] border-transparent font-semibold shadow-[0_2px_10px_rgba(242,169,140,0.3)]"
+    : "spatial-glass text-[var(--ink)] shadow-sm";
 
   return (
     <span

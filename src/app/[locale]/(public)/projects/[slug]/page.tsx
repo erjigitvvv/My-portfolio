@@ -10,7 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 import { getProjectBySlug } from "@/lib/queries";
-import { incrementProjectViewAction } from "@/lib/actions";
+import { ViewTracker } from "@/components/ui/ViewTracker";
 import { getDictionary, localizeField } from "@/i18n/messages";
 import { constructMetadata } from "@/lib/seo";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -18,7 +18,7 @@ import { Badge, getCategoryBadgeVariant } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: re-generated hourly or instantly via revalidatePath
 
 export async function generateMetadata({
   params,
@@ -54,8 +54,6 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
-  await incrementProjectViewAction(slug);
-
   const title = localizeField(project, "title", locale);
   const summary = localizeField(project, "summary", locale);
   const content = localizeField(project, "content", locale);
@@ -63,6 +61,7 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-6">
+      <ViewTracker kind="project" slug={slug} />
       <ScrollReveal direction="up">
         <Link
           href={`/${locale}/projects`}

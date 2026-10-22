@@ -68,7 +68,7 @@ export function SkillBars({
               className={`inline-flex items-center gap-2 rounded-pill px-4 py-2 font-mono text-xs font-medium transition-all ${
                 active
                   ? "bg-[var(--accent)] text-[#0B0B0B] font-bold shadow-[0_8px_24px_rgba(61,190,116,0.35)] scale-[1.02]"
-                  : "clear-liquid-glass text-[var(--muted)] hover:text-[var(--ink)] hover:border-[var(--accent)]"
+                  : "spatial-ornament text-[var(--muted)] hover:text-[var(--ink)] hover:border-[var(--accent)]"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />

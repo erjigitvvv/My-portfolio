@@ -1,19 +1,19 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
 import prisma from "./db";
+import {
+  ADMIN_COOKIE_NAME,
+  SESSION_TTL_SECONDS,
+  signSession,
+  verifySessionToken,
+  type AdminSession,
+} from "./session";
 
-export const ADMIN_COOKIE_NAME = "cyber_admin_session";
-
-export interface AdminSession {
-  userId: string;
-  email: string;
-  name: string;
-  role: string;
-  issuedAt: number;
-}
+export { ADMIN_COOKIE_NAME, SESSION_TTL_SECONDS };
+export type { AdminSession };
 
 /**
- * Hash a plaintext password using salted scrypt (Section 8 Security rule).
+ * Hash a plaintext password using salted scrypt.
  */
 export function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -25,9 +25,7 @@ export function hashPassword(password: string): string {
  * Constant-time verification of a plaintext password against a stored scrypt hash.
  */
 export function verifyPassword(password: string, storedHash: string): boolean {
-  if (!storedHash.startsWith("scrypt$")) {
-    return false;
-  }
+  if (!storedHash.startsWith("scrypt$")) return false;
   const parts = storedHash.split("$");
   if (parts.length !== 3) return false;
   const [, salt, keyHex] = parts;
@@ -37,8 +35,12 @@ export function verifyPassword(password: string, storedHash: string): boolean {
   return crypto.timingSafeEqual(keyBuffer, derivedBuffer);
 }
 
+// A throw-away hash so that "unknown e-mail" costs the same as "wrong password"
+// (prevents user enumeration through response timing).
+const DUMMY_HASH = hashPassword(crypto.randomBytes(8).toString("hex"));
+
 /**
- * Authenticate the single admin user against the Prisma `User` table.
+ * Authenticate the admin against the Prisma `User` table.
  */
 export async function verifyAdminCredentials(
   email: string,
@@ -46,53 +48,39 @@ export async function verifyAdminCredentials(
 ): Promise<AdminSession | null> {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (user && verifyPassword(password, user.passwordHash)) {
+    const ok = verifyPassword(password, user?.passwordHash ?? DUMMY_HASH);
+    if (user && ok) {
+      const now = Date.now();
       return {
         userId: user.id,
         email: user.email,
         name: user.name,
-        role: "SUPERADMIN",
-        issuedAt: Date.now(),
+        role: user.role,
+        issuedAt: now,
+        expiresAt: now + SESSION_TTL_SECONDS * 1000,
       };
     }
   } catch (err) {
     console.error("Auth DB lookup error:", err);
   }
-
   return null;
 }
 
-function getSecret(): string {
-  return process.env.AUTH_SECRET || "default-dev-secret-change-in-production";
+export async function createSessionToken(session: AdminSession): Promise<string> {
+  return signSession(session);
 }
 
-export function createSessionToken(session: AdminSession): string {
-  const payload = Buffer.from(JSON.stringify(session)).toString("base64url");
-  const sig = crypto
-    .createHmac("sha256", getSecret())
-    .update(payload)
-    .digest("base64url");
-  return `${payload}.${sig}`;
-}
+/** Cookie options shared by every place that sets the session cookie. */
+export const sessionCookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: SESSION_TTL_SECONDS,
+};
 
-export function parseSessionToken(token: string | undefined): AdminSession | null {
-  if (!token || !token.includes(".")) return null;
-  try {
-    const [payload, sig] = token.split(".");
-    const expectedSig = crypto
-      .createHmac("sha256", getSecret())
-      .update(payload)
-      .digest("base64url");
-    if (sig !== expectedSig) return null;
-    const decoded = Buffer.from(payload, "base64url").toString("utf-8");
-    return JSON.parse(decoded) as AdminSession;
-  } catch {
-    return null;
-  }
-}
-
-export function getAdminSession(): AdminSession | null {
-  const cookieStore = cookies();
-  const token = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
-  return parseSessionToken(token);
+/** Reads and cryptographically verifies the current admin session (or null). */
+export async function getAdminSession(): Promise<AdminSession | null> {
+  const token = cookies().get(ADMIN_COOKIE_NAME)?.value;
+  return verifySessionToken(token);
 }

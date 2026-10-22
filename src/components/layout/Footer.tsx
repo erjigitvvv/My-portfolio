@@ -65,7 +65,7 @@ export function Footer({ locale }: { locale: string }) {
                   href={item.href}
                   target={item.href.startsWith("http") ? "_blank" : undefined}
                   rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="clear-liquid-glass liquid-shimmer-sweep inline-flex items-center gap-2 rounded-pill px-3.5 py-2 font-mono text-xs font-semibold text-[var(--ink)] transition hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
+                  className="spatial-ornament liquid-shimmer-sweep inline-flex items-center gap-2 rounded-pill px-3.5 py-2 font-mono text-xs font-semibold text-[var(--ink)] transition hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
                 >
                   <Icon className="h-3.5 w-3.5 text-[var(--accent)]" />
                   <span>{item.label}</span>
@@ -79,7 +79,7 @@ export function Footer({ locale }: { locale: string }) {
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
             <Link
               href={`/${locale}/privacy`}
-              className="clear-liquid-glass inline-flex items-center gap-1.5 rounded-pill px-3.5 py-2 font-mono text-xs text-[var(--muted)] hover:text-[var(--ink)]"
+              className="spatial-ornament inline-flex items-center gap-1.5 rounded-pill px-3.5 py-2 font-mono text-xs text-[var(--muted)] hover:text-[var(--ink)]"
             >
               <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
               <span>({dict.nav.privacy})</span>

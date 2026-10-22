@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { Timeline } from "@/components/sections/Timeline";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {
@@ -33,18 +35,18 @@ export default async function AboutPage({
     getExperiences(),
   ]);
 
-  const role = localizeField(profile, "role", locale);
+  const role = localizeField(profile, "headline", locale);
   const about = localizeField(profile, "about", locale);
 
   return (
-    <div className="space-y-12 py-6">
+    <div className="min-h-screen space-y-16 py-16 sm:py-24">
       <ScrollReveal direction="up">
         <div className="space-y-3">
           <Badge variant="cyber" pulse>
             ENGINEER DOSSIER // SECURITY CLEARANCE: LEVEL 5
           </Badge>
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white sm:text-5xl">
-            {profile.name || profile.fullName || "Erjigitov Mirhamid"}
+            {profile.name}
           </h1>
           <p className="font-mono text-sm sm:text-base text-emerald-500 dark:text-emerald-400">
             {role}
@@ -117,7 +119,7 @@ export default async function AboutPage({
             </div>
 
             <a
-              href={locale === "en" ? profile.resumeUrlEn : profile.resumeUrlUz}
+              href={locale === "en" ? profile.cvUrl_en : profile.cvUrl_uz}
               download
               className="block pt-2"
             >

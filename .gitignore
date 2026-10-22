@@ -36,3 +36,10 @@ next-env.d.ts
 # local sqlite databases
 prisma/*.db
 prisma/*.db-journal
+
+# scratch frame dumps (not part of the app)
+/frame_*.png
+/bo_frame_*.png
+
+# runtime uploads
+/public/uploads/

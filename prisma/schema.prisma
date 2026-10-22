@@ -15,25 +15,29 @@ model User {
   email        String   @unique
   passwordHash String
   name         String   @default("Admin")
+  role         String   @default("SUPERADMIN")
   createdAt    DateTime @default(now())
 }
 
 // 2. Profile (Single row: id = "main")
+// One canonical column per datum: bilingual text uses `_uz` / `_en`, links are plain columns.
 model Profile {
   id              String   @id @default("main")
   name            String
-  headline_uz     String
-  headline_en     String
-  bio_uz          String
-  bio_en          String
-  heroLine1_uz    String   @default("SARDORBEK")
-  heroLine1_en    String   @default("SARDORBEK")
-  heroLine2_uz    String   @default("ALIMOV *26")
-  heroLine2_en    String   @default("ALIMOV *26")
+  heroLine1_uz    String   @default("MIRHAMID")
+  heroLine1_en    String   @default("MIRHAMID")
+  heroLine2_uz    String   @default("ERJIGITOV *26")
+  heroLine2_en    String   @default("ERJIGITOV *26")
   availability_uz String   @default("Loyihalarga ochiq*")
   availability_en String   @default("Open to work*")
   rolePill_uz     String   @default("AI • KIBERXAVFSIZLIK • DEVOPS")
   rolePill_en     String   @default("AI • CYBERSECURITY • DEVOPS")
+  headline_uz     String
+  headline_en     String
+  bio_uz          String
+  bio_en          String
+  about_uz        String   @default("")
+  about_en        String   @default("")
   specialties_uz  String   @default("[]") // JSON 4-item array
   specialties_en  String   @default("[]") // JSON 4-item array
   avatarConfig    String   @default("{}") // JSON config
@@ -41,28 +45,13 @@ model Profile {
   cvUrl_uz        String   @default("/cv-uz.pdf")
   cvUrl_en        String   @default("/cv-en.pdf")
   email           String
-  location        String
-  socials         String   @default("{}") // JSON string
-  // Compat fields
-  fullName        String   @default("Sardorbek Alimov")
-  roleUz          String   @default("")
-  roleEn          String   @default("")
-  bioUz           String   @default("")
-  bioEn           String   @default("")
-  aboutUz         String   @default("")
-  aboutEn         String   @default("")
-  resumeUrlUz     String   @default("/cv-uz.pdf")
-  resumeUrlEn     String   @default("/cv-en.pdf")
   phone           String   @default("")
+  location        String
   githubUrl       String   @default("")
   linkedinUrl     String   @default("")
   telegramUrl     String   @default("")
   pgpKey          String   @default("")
   uptimeStatus    String   @default("99.98% • Zero-Trust Verified")
-  yearsExp        Int      @default(6)
-  projectsCount   Int      @default(44)
-  certsCount      Int      @default(12)
-  securityAudits  Int      @default(88)
   updatedAt       DateTime @updatedAt
 }
 
@@ -227,24 +216,7 @@ model Resource {
   createdAt      DateTime @default(now())
 }
 
-// 10. Talk (Speaking events)
-model Talk {
-  id             String   @id @default(cuid())
-  title_uz       String
-  title_en       String
-  description_uz String
-  description_en String
-  eventName      String
-  date           String
-  location       String
-  slidesUrl      String   @default("")
-  videoUrl       String   @default("")
-  image          String   @default("")
-  published      Boolean  @default(true)
-  createdAt      DateTime @default(now())
-}
-
-// Compat alias model for existing Speaking queries
+// 10. Speaking events (single canonical model; the old duplicate `Talk` table was removed)
 model Speaking {
   id            String   @id @default(cuid())
   titleUz       String
@@ -262,19 +234,7 @@ model Speaking {
   createdAt     DateTime @default(now())
 }
 
-// 11. Message (Contact submissions with IP & read status)
-model Message {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  subject   String   @default("")
-  body      String
-  isRead    Boolean  @default(false)
-  ip        String   @default("127.0.0.1")
-  createdAt DateTime @default(now())
-}
-
-// Compat alias model for ContactMessage
+// 11. ContactMessage (the old duplicate `Message` table was merged into this one)
 model ContactMessage {
   id        String   @id @default(cuid())
   name      String
@@ -284,7 +244,10 @@ model ContactMessage {
   message   String
   encrypted Boolean  @default(false)
   isRead    Boolean  @default(false)
+  ip        String   @default("")
   createdAt DateTime @default(now())
+
+  @@index([isRead, createdAt])
 }
 
 // 12. Page (Editable static pages like privacy)
@@ -313,14 +276,4 @@ model Media {
 model Setting {
   key   String @id
   value String // JSON string
-}
-
-// Legacy AdminUser table
-model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String
-  passwordHash String
-  role         String   @default("SUPERADMIN")
-  createdAt    DateTime @default(now())
 }

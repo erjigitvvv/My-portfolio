@@ -157,57 +157,37 @@ export function Header({ locale }: { locale: string }) {
 
   return (
     <>
-      {/* Top-Left Clear Liquid Glass Trigger Bar (Responsive across Mobile, Tablet, Desktop) */}
-      <header className="fixed top-3.5 left-3.5 right-3.5 sm:right-auto z-40 flex items-center justify-between sm:justify-start gap-2.5 pointer-events-none">
+      {/* Top Floating Spatial Bar (visionOS Spatial Window Controls) */}
+      <header className="fixed top-3.5 inset-x-3.5 z-40 flex items-center justify-between pointer-events-none">
+        {/* Left: Spatial Menu Capsule */}
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
           aria-label="Open left navigation drawer"
-          className="clear-liquid-glass liquid-card-sheen pointer-events-auto group flex items-center gap-2.5 sm:gap-3 rounded-pill px-3.5 sm:px-4 py-2 sm:py-2.5 font-mono text-xs font-semibold text-[var(--ink)] transition-all duration-300 hover:scale-[1.03] hover:border-[var(--accent)]"
+          className="spatial-ornament liquid-card-sheen pointer-events-auto group flex items-center gap-2.5 sm:gap-3 px-4 py-2 font-mono text-xs font-semibold text-[var(--ink)] transition-all duration-300 hover:scale-[1.03] hover:border-[var(--accent)] shadow-lg"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent)] text-[#0B0B0B] shadow-sm transition-transform duration-300 group-hover:rotate-90">
             <Menu className="h-4 w-4" />
           </span>
           <span className="font-bold tracking-wider">MENU</span>
-          <span className="h-3.5 w-[1px] bg-[var(--line)]" />
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
-            <span className="font-bold">{count}</span>
-            <span className="hidden xs:inline text-[var(--muted)]">({label})</span>
-          </span>
         </button>
 
-        <Link
-          href={`/${locale}`}
-          aria-label="Erjigitov Mirhamid Home"
-          className="clear-liquid-glass liquid-card-sheen pointer-events-auto inline-flex items-center gap-2.5 rounded-pill px-2.5 sm:px-3.5 py-1.5 font-mono text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--accent)]"
-        >
-          <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-sky-400/60 bg-slate-950 shadow-[0_0_12px_rgba(56,189,248,0.45)]">
-            <img
-              src="/avatar/cyborg-profile.png"
-              alt="Erjigitov Mirhamid Avatar"
-              className="h-full w-full object-cover object-top scale-125"
-            />
-          </span>
-          <span className="hidden sm:inline tracking-tight">Erjigitov Mirhamid</span>
-        </Link>
+        {/* Right: Spatial Status & Utility Capsule */}
+        <div className="spatial-ornament liquid-card-sheen pointer-events-auto hidden sm:flex items-center gap-3 px-3.5 py-1.5 shadow-lg">
+          <div className="flex items-center gap-2 font-mono text-xs text-[var(--muted)] border-r border-[var(--line)]/50 pr-3">
+            <span className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
+            <span className="font-bold text-[var(--ink)]">{count}</span>
+            <span className="text-[10px] tracking-wider uppercase opacity-75">{label}</span>
+          </div>
+          <LangSwitch locale={locale} />
+          <ThemeToggle />
+        </div>
       </header>
 
-      {/* Subtle Left-Edge Quick Pull Tab on Desktop */}
-      <button
-        type="button"
-        onClick={() => setDrawerOpen(true)}
-        aria-label="Open menu from left edge"
-        className="clear-liquid-glass fixed left-0 top-1/2 z-30 hidden -translate-y-1/2 items-center gap-1.5 rounded-r-2xl border-l-0 px-2.5 py-4 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] transition-all hover:px-4 hover:text-[var(--ink)] lg:flex"
-        style={{ writingMode: "vertical-rl" }}
-      >
-        <span>☰ MENU • BOʻLIMLAR</span>
-      </button>
-
-      {/* Mobile & Tablet Floating Clear Liquid Glass Bottom Dock */}
+      {/* Mobile & Tablet Floating Spatial Glass Bottom Dock */}
       <nav
         aria-label="Mobile Quick Navigation Dock"
-        className="clear-liquid-glass liquid-card-sheen fixed bottom-3 inset-x-3 z-40 mx-auto flex max-w-md items-center justify-around rounded-pill px-2 py-1.5 shadow-2xl lg:hidden"
+        className="spatial-ornament liquid-card-sheen fixed bottom-3 inset-x-3 z-40 mx-auto flex max-w-md items-center justify-around px-2 py-1.5 shadow-2xl lg:hidden"
       >
         {mobileDockItems.map((item) => {
           const Icon = item.icon;
@@ -253,7 +233,7 @@ export function Header({ locale }: { locale: string }) {
               className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm"
             />
 
-            {/* Left Clear Liquid Glass Drawer */}
+            {/* Left Spatial Liquid Glass Drawer */}
             <motion.aside
               key="left-drawer"
               initial={{ x: "-100%", opacity: 0.5 }}
@@ -261,7 +241,7 @@ export function Header({ locale }: { locale: string }) {
               exit={{ x: "-100%", opacity: 0 }}
               transition={{ type: "spring", stiffness: 320, damping: 32 }}
               aria-label="Left Navigation Drawer"
-              className="clear-liquid-glass liquid-card-sheen fixed top-0 left-0 bottom-0 z-50 flex w-[90vw] max-w-[400px] flex-col justify-between overflow-y-auto border-r border-[var(--glass-border)] p-5 sm:p-6 shadow-2xl"
+              className="spatial-glass liquid-card-sheen fixed top-0 left-0 bottom-0 z-50 flex w-[90vw] max-w-[400px] flex-col justify-between overflow-y-auto border-r border-[var(--glass-border)] p-5 sm:p-6 shadow-2xl"
             >
               {/* Top Profile Header inside Drawer */}
               <div>
@@ -271,11 +251,11 @@ export function Header({ locale }: { locale: string }) {
                     onClick={() => setDrawerOpen(false)}
                     className="flex items-center gap-3"
                   >
-                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-sky-400/50 bg-slate-950 shadow-[0_0_16px_rgba(56,189,248,0.35)]">
+                    <div className="flex h-12 w-20 shrink-0 items-center justify-center rounded-2xl border border-[var(--accent)]/40 bg-white/50 dark:bg-black/50 p-1.5 shadow-md">
                       <img
-                        src="/avatar/cyborg-profile.png"
-                        alt="Erjigitov Mirhamid Avatar"
-                        className="h-full w-full object-cover object-top scale-125"
+                        src="/5.jpg"
+                        alt="Erjigitov Mirhamid Signature"
+                        className="h-full w-full object-contain filter dark:invert"
                       />
                     </div>
                     <div>
@@ -357,44 +337,9 @@ export function Header({ locale }: { locale: string }) {
                     })}
                   </nav>
                 </div>
-
-                {/* Section 2: Quick Scroll Sections (Bo'limlar with Matching Icons) */}
-                <div className="mt-6 border-t border-[var(--line)]/60 pt-5">
-                  <div className="mb-2.5 flex items-center justify-between font-mono text-[11px] uppercase tracking-wider text-[var(--muted)]">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Layers className="h-3.5 w-3.5 text-[var(--accent-text)]" />
-                      {locale === "en"
-                        ? "(PAGE SECTIONS • SCROLL)"
-                        : "(SAHIFA BOʻLIMLARI • SCROLL)"}
-                    </span>
-                    <Sparkles className="h-3.5 w-3.5 text-[var(--accent-text)]" />
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    {scrollSections.map((sec) => {
-                      const SecIcon = sec.icon;
-                      return (
-                        <button
-                          key={sec.hash}
-                          type="button"
-                          onClick={() => handleSectionScroll(sec.hash)}
-                          className="group flex items-center justify-between rounded-xl px-2.5 py-2 text-left font-mono text-xs text-[var(--muted)] transition hover:bg-[var(--ink)]/5 hover:text-[var(--ink)]"
-                        >
-                          <span className="flex items-center gap-2.5">
-                            <span className="liquid-icon-badge flex h-7 w-7 items-center justify-center rounded-lg">
-                              <SecIcon className={`h-3.5 w-3.5 ${sec.color}`} />
-                            </span>
-                            <span>{sec.label}</span>
-                          </span>
-                          <ArrowUpRight className="h-3.5 w-3.5 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
 
-              {/* Section 3: Hidden Navbar Buttons (LangSwitch, ThemeToggle, Admin, AI Command) */}
+              {/* Section 3: Hidden Navbar Buttons (LangSwitch, ThemeToggle, AI Command) */}
               <div className="mt-6 border-t border-[var(--line)]/60 pt-5 space-y-3">
                 <p className="font-mono text-[10px] uppercase tracking-wider text-[var(--muted)]">
                   {locale === "en"
@@ -405,26 +350,6 @@ export function Header({ locale }: { locale: string }) {
                 <div className="flex items-center justify-between gap-2">
                   <LangSwitch locale={locale} />
                   <ThemeToggle />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <Link
-                    href="/admin"
-                    onClick={() => setDrawerOpen(false)}
-                    className="clear-liquid-glass flex items-center justify-center gap-1.5 rounded-pill px-3 py-2.5 font-mono text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--accent)]"
-                  >
-                    <Lock className="h-3.5 w-3.5 text-[var(--accent-text)]" />
-                    <span>Admin CMS</span>
-                  </Link>
-
-                  <Link
-                    href={`/${locale}/contact`}
-                    onClick={() => setDrawerOpen(false)}
-                    className="flex items-center justify-center gap-1.5 rounded-pill bg-[var(--accent)] px-3 py-2.5 font-mono text-xs font-bold text-[#0B0B0B] transition hover:brightness-105"
-                  >
-                    <ShieldCheck className="h-3.5 w-3.5" />
-                    <span>{locale === "en" ? "Hire Me" : "Bogʻlanish"}</span>
-                  </Link>
                 </div>
 
                 <div className="flex items-center justify-between rounded-2xl bg-[var(--ink)]/5 px-3.5 py-2 font-mono text-[11px] text-[var(--muted)]">

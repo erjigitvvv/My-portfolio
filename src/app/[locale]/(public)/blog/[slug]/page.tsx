@@ -3,15 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getPostBySlug } from "@/lib/queries";
-import { incrementPostReactionAction } from "@/lib/actions";
 import { getDictionary, localizeField } from "@/i18n/messages";
 import { constructMetadata } from "@/lib/seo";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge, getCategoryBadgeVariant } from "@/components/ui/Badge";
 import { PostReactionBar } from "./PostReactionBar";
+import { ViewTracker } from "@/components/ui/ViewTracker";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: re-generated hourly or instantly via revalidatePath
 
 export async function generateMetadata({
   params,
@@ -47,14 +47,13 @@ export default async function BlogDetailPage({
     notFound();
   }
 
-  await incrementPostReactionAction(slug, "view");
-
   const title = localizeField(post, "title", locale);
   const excerpt = localizeField(post, "excerpt", locale);
   const content = localizeField(post, "content", locale);
 
   return (
     <article className="mx-auto max-w-4xl space-y-8 py-6">
+      <ViewTracker kind="post" slug={slug} />
       <ScrollReveal direction="up">
         <Link
           href={`/${locale}/blog`}
@@ -92,7 +91,7 @@ export default async function BlogDetailPage({
       <ScrollReveal direction="up" delay={0.05}>
         <PostReactionBar
           slug={slug}
-          initialViews={post.views + 1}
+          initialViews={post.views}
           initialLikes={post.likes}
         />
       </ScrollReveal>

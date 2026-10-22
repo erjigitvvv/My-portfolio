@@ -21,7 +21,7 @@ export function LangSwitch({ locale }: { locale: string }) {
     <div
       role="group"
       aria-label="Language switcher"
-      className="glass-surface inline-flex items-center rounded-pill p-0.5 font-mono text-xs"
+      className="spatial-ornament inline-flex items-center p-0.5 font-mono text-xs shadow-sm"
     >
       <Link
         href={buildPath("uz")}

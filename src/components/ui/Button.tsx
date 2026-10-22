@@ -2,14 +2,13 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "ink" | "cyber" | "ai" | "glass" | "danger" | "ghost";
+  variant?: "primary" | "ink" | "cyber" | "ai" | "glass" | "spatial" | "danger" | "ghost";
   size?: "sm" | "md" | "lg";
 }
 
 /**
- * Pill Button component following DESIGN_SPEC.md Section 1.2 & 1.4:
- * - Pill radius: 999px
- * - Primary button uses --accent fill with --accent-ink (#0B0B0B) text.
+ * Spatial Tactile Pill Button (Apple visionOS 3D Floating Pill)
+ * Features dynamic optical rim highlights, subtle Z-elevation on hover, and haptic depression.
  */
 export function Button({
   children,
@@ -19,17 +18,14 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    primary:
-      "bg-[var(--accent)] text-[var(--accent-ink)] font-semibold hover:brightness-105 hover:scale-[1.02] shadow-sm",
-    ink: "bg-[var(--ink)] text-[var(--bg)] font-semibold hover:opacity-90",
-    cyber:
-      "glass-surface text-[var(--ink)] hover:border-[var(--accent)] font-medium",
-    ai: "glass-surface text-[var(--ink)] hover:border-[var(--accent)] font-medium",
-    glass:
-      "glass-surface text-[var(--ink)] hover:border-[var(--ink)]/40 font-medium",
-    danger: "bg-[#E5484D] text-white font-semibold hover:opacity-90",
-    ghost:
-      "text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--glass)]",
+    primary: "clay-btn-primary font-bold tracking-tight shadow-[0_12px_28px_-4px_rgba(61,190,116,0.45)]",
+    spatial: "spatial-ornament liquid-card-sheen font-bold text-[var(--ink)] hover:border-[var(--accent)] hover:shadow-[0_16px_32px_-6px_rgba(61,190,116,0.3)]",
+    ink: "bg-[var(--ink)] text-[var(--bg)] font-bold hover:opacity-90 shadow-lg",
+    cyber: "spatial-ornament liquid-card-sheen font-semibold text-[var(--ink)] hover:border-[var(--accent)]",
+    ai: "spatial-ornament liquid-card-sheen font-semibold text-[var(--ink)] hover:border-[var(--accent)]",
+    glass: "spatial-ornament liquid-card-sheen font-semibold text-[var(--ink)] hover:border-[var(--accent)]",
+    danger: "bg-[#E5484D] text-white font-bold hover:opacity-90 shadow-md",
+    ghost: "text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--glass)] font-medium",
   };
 
   const sizes = {

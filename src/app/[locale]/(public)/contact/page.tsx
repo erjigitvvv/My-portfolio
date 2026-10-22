@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, MapPin, KeyRound, Send, ShieldCheck } from "lucide-react";
+import { Mail, MapPin, Send, ShieldCheck } from "lucide-react";
 import { getProfile } from "@/lib/queries";
 import { getDictionary } from "@/i18n/messages";
 import { constructMetadata } from "@/lib/seo";
@@ -7,6 +7,8 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
 import { ContactForm } from "./ContactForm";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -31,7 +33,7 @@ export default async function ContactPage({
   const profile = await getProfile();
 
   return (
-    <div className="space-y-10 py-6">
+    <div className="min-h-screen space-y-16 py-16 sm:py-24">
       <ScrollReveal direction="up">
         <div className="space-y-3">
           <Badge variant="cyber" pulse>
@@ -79,19 +81,8 @@ export default async function ContactPage({
               </p>
             </div>
           </GlassCard>
-
-          <GlassCard variant="default" className="space-y-3">
-            <div className="flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
-              <KeyRound className="h-4 w-4" />
-              <span>PGP PUBLIC KEY (FOR SENSITIVE AUDITS)</span>
-            </div>
-            <pre className="overflow-x-auto rounded-xl border border-white/10 bg-slate-950/90 p-3.5 font-mono text-[10px] text-slate-300 leading-relaxed">
-              {profile.pgpKey}
-            </pre>
-          </GlassCard>
         </ScrollReveal>
       </div>
     </div>
   );
 }
-

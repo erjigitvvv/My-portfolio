@@ -2,98 +2,55 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import prisma from "../db";
-import {
-  ADMIN_COOKIE_NAME,
-  createSessionToken,
-  getAdminSession,
-  verifyAdminCredentials,
-} from "../auth";
+import { getClientIp, rateLimit } from "../rate-limit";
+import { ADMIN_COOKIE_NAME, getAdminSession } from "../auth";
 import {
   certificateSchema,
-  contactSchema,
   postSchema,
+  profileSchema,
   projectSchema,
   resourceSchema,
   skillSchema,
   speakingSchema,
 } from "../validators";
-import { sendContactNotification } from "../notify";
 
-function requireAdmin() {
-  const session = getAdminSession();
+async function requireAdmin() {
+  const session = await getAdminSession();
   if (!session) {
     throw new Error("Unauthorized: Admin session required");
   }
   return session;
 }
 
-// 1. Auth Actions
-export async function loginAdminAction(formData: FormData) {
-  const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
-
-  const session = await verifyAdminCredentials(email, password);
-  if (!session) {
-    return { ok: false, error: "Email yoki parol noto'g'ri!" };
-  }
-
-  const token = createSessionToken(session);
-  cookies().set(ADMIN_COOKIE_NAME, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
-
-  return { ok: true };
-}
-
+// 1. Auth Actions (login is handled by POST /api/auth, which is rate-limited)
 export async function logoutAdminAction() {
   cookies().delete(ADMIN_COOKIE_NAME);
   revalidatePath("/admin");
   return { ok: true };
 }
 
-// 2. Public Interactive Actions
-export async function submitContactAction(input: unknown) {
-  const parsed = contactSchema.safeParse(input);
-  if (!parsed.success) {
-    return {
-      ok: false,
-      error: parsed.error.issues[0]?.message || "Ma'lumotlar xato kiritildi",
-    };
-  }
-
-  const msg = await prisma.contactMessage.create({
-    data: parsed.data,
-  });
-
-  await prisma.message.create({
-    data: {
-      name: parsed.data.name,
-      email: parsed.data.email,
-      subject: parsed.data.subject,
-      body: parsed.data.message,
-      isRead: false,
-    },
-  });
-
-  await sendContactNotification(parsed.data);
-  revalidatePath("/admin/messages");
-  revalidatePath("/admin");
-
-  return { ok: true, id: msg.id };
+/** Invalidate every cached public page (cheap: this is a low-write CMS). */
+function revalidateSite() {
+  revalidatePath("/", "layout");
 }
 
+function clientIp() {
+  return getClientIp(headers());
+}
+
+// 2. Public Interactive Actions
 export async function incrementPostReactionAction(slug: string, type: "view" | "like") {
+  const windowMs = type === "like" ? 60 * 60 * 1000 : 60 * 1000;
+  if (!rateLimit(`post:${type}:${clientIp()}:${slug}`, 1, windowMs).allowed) {
+    return { ok: false };
+  }
   try {
     const updated = await prisma.post.update({
       where: { slug },
       data: type === "like" ? { likes: { increment: 1 } } : { views: { increment: 1 } },
     });
-    revalidatePath(`/uz/blog/${slug}`);
-    revalidatePath(`/en/blog/${slug}`);
     return { ok: true, views: updated.views, likes: updated.likes };
   } catch {
     return { ok: false };
@@ -101,6 +58,9 @@ export async function incrementPostReactionAction(slug: string, type: "view" | "
 }
 
 export async function incrementProjectViewAction(slug: string) {
+  if (!rateLimit(`project:view:${clientIp()}:${slug}`, 1, 60 * 1000).allowed) {
+    return { ok: false };
+  }
   try {
     await prisma.project.update({
       where: { slug },
@@ -113,13 +73,14 @@ export async function incrementProjectViewAction(slug: string) {
 }
 
 export async function incrementResourceDownloadAction(id: string) {
+  if (!rateLimit(`resource:dl:${clientIp()}:${id}`, 3, 60 * 1000).allowed) {
+    return { ok: false };
+  }
   try {
     const res = await prisma.resource.update({
       where: { id },
       data: { downloads: { increment: 1 } },
     });
-    revalidatePath("/uz/resources");
-    revalidatePath("/en/resources");
     return { ok: true, downloads: res.downloads };
   } catch {
     return { ok: false };
@@ -128,7 +89,7 @@ export async function incrementResourceDownloadAction(id: string) {
 
 // 3. Admin CRUD Actions
 export async function createProjectAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     slug: String(formData.get("slug") || "")
       .toLowerCase()
@@ -170,20 +131,22 @@ export async function createProjectAction(formData: FormData): Promise<void> {
   revalidatePath("/uz/projects");
   revalidatePath("/en/projects");
   revalidatePath("/admin/projects");
+  revalidateSite();
 }
 
 export async function deleteProjectAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.project.delete({ where: { id } });
   revalidatePath("/uz");
   revalidatePath("/en");
   revalidatePath("/uz/projects");
   revalidatePath("/en/projects");
   revalidatePath("/admin/projects");
+  revalidateSite();
 }
 
 export async function createPostAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     slug: String(formData.get("slug") || "")
       .toLowerCase()
@@ -220,18 +183,20 @@ export async function createPostAction(formData: FormData): Promise<void> {
   revalidatePath("/uz/blog");
   revalidatePath("/en/blog");
   revalidatePath("/admin/blog");
+  revalidateSite();
 }
 
 export async function deletePostAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.post.delete({ where: { id } });
   revalidatePath("/uz/blog");
   revalidatePath("/en/blog");
   revalidatePath("/admin/blog");
+  revalidateSite();
 }
 
 export async function createSkillAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     name: String(formData.get("name") || ""),
     category: String(formData.get("category") || "AI"),
@@ -246,18 +211,20 @@ export async function createSkillAction(formData: FormData): Promise<void> {
   revalidatePath("/uz/skills");
   revalidatePath("/en/skills");
   revalidatePath("/admin/skills");
+  revalidateSite();
 }
 
 export async function deleteSkillAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.skill.delete({ where: { id } });
   revalidatePath("/uz/skills");
   revalidatePath("/en/skills");
   revalidatePath("/admin/skills");
+  revalidateSite();
 }
 
 export async function createCertificateAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     titleUz: String(formData.get("titleUz") || ""),
     titleEn: String(formData.get("titleEn") || ""),
@@ -279,18 +246,20 @@ export async function createCertificateAction(formData: FormData): Promise<void>
   revalidatePath("/uz/certificates");
   revalidatePath("/en/certificates");
   revalidatePath("/admin/certificates");
+  revalidateSite();
 }
 
 export async function deleteCertificateAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.certificate.delete({ where: { id } });
   revalidatePath("/uz/certificates");
   revalidatePath("/en/certificates");
   revalidatePath("/admin/certificates");
+  revalidateSite();
 }
 
 export async function createResourceAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     titleUz: String(formData.get("titleUz") || ""),
     titleEn: String(formData.get("titleEn") || ""),
@@ -315,18 +284,20 @@ export async function createResourceAction(formData: FormData): Promise<void> {
   revalidatePath("/uz/resources");
   revalidatePath("/en/resources");
   revalidatePath("/admin/resources");
+  revalidateSite();
 }
 
 export async function deleteResourceAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.resource.delete({ where: { id } });
   revalidatePath("/uz/resources");
   revalidatePath("/en/resources");
   revalidatePath("/admin/resources");
+  revalidateSite();
 }
 
 export async function createSpeakingAction(formData: FormData): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   const raw = {
     titleUz: String(formData.get("titleUz") || ""),
     titleEn: String(formData.get("titleEn") || ""),
@@ -342,35 +313,24 @@ export async function createSpeakingAction(formData: FormData): Promise<void> {
   };
   const parsed = speakingSchema.parse(raw);
   await prisma.speaking.create({ data: parsed });
-  await prisma.talk.create({
-    data: {
-      title_uz: parsed.titleUz,
-      title_en: parsed.titleEn,
-      description_uz: parsed.descriptionUz,
-      description_en: parsed.descriptionEn,
-      eventName: parsed.eventEn,
-      date: parsed.date,
-      location: parsed.location,
-      slidesUrl: parsed.slidesUrl,
-      videoUrl: parsed.videoUrl,
-    },
-  });
 
   revalidatePath("/uz/speaking");
   revalidatePath("/en/speaking");
   revalidatePath("/admin/speaking");
+  revalidateSite();
 }
 
 export async function deleteSpeakingAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.speaking.delete({ where: { id } });
   revalidatePath("/uz/speaking");
   revalidatePath("/en/speaking");
   revalidatePath("/admin/speaking");
+  revalidateSite();
 }
 
 export async function markMessageReadAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.contactMessage.update({
     where: { id },
     data: { isRead: true },
@@ -380,48 +340,53 @@ export async function markMessageReadAction(id: string): Promise<void> {
 }
 
 export async function deleteMessageAction(id: string): Promise<void> {
-  requireAdmin();
+  await requireAdmin();
   await prisma.contactMessage.delete({ where: { id } });
   revalidatePath("/admin/messages");
   revalidatePath("/admin");
 }
 
 export async function updateProfileAction(formData: FormData): Promise<void> {
-  requireAdmin();
-  const fullName = String(formData.get("fullName") || "");
-  const roleUz = String(formData.get("roleUz") || "");
-  const roleEn = String(formData.get("roleEn") || "");
-  const bioUz = String(formData.get("bioUz") || "");
-  const bioEn = String(formData.get("bioEn") || "");
+  await requireAdmin();
+  const str = (key: string) => String(formData.get(key) ?? "");
 
-  await prisma.profile.update({
-    where: { id: "main" },
-    data: {
-      name: fullName,
-      headline_uz: roleUz,
-      headline_en: roleEn,
-      bio_uz: bioUz,
-      bio_en: bioEn,
-      fullName,
-      roleUz,
-      roleEn,
-      bioUz,
-      bioEn,
-      aboutUz: String(formData.get("aboutUz") || ""),
-      aboutEn: String(formData.get("aboutEn") || ""),
-      location: String(formData.get("location") || ""),
-      email: String(formData.get("email") || ""),
-      phone: String(formData.get("phone") || ""),
-      githubUrl: String(formData.get("githubUrl") || ""),
-      linkedinUrl: String(formData.get("linkedinUrl") || ""),
-      telegramUrl: String(formData.get("telegramUrl") || ""),
-      uptimeStatus: String(formData.get("uptimeStatus") || ""),
-      pgpKey: String(formData.get("pgpKey") || ""),
-    },
+  // Every field (hero lines, availability pill, role pill, ...) is editable and
+  // validated, so the public Hero reflects exactly what the admin saved.
+  const parsed = profileSchema.parse({
+    name: str("name"),
+    heroLine1_uz: str("heroLine1_uz"),
+    heroLine1_en: str("heroLine1_en"),
+    heroLine2_uz: str("heroLine2_uz"),
+    heroLine2_en: str("heroLine2_en"),
+    availability_uz: str("availability_uz"),
+    availability_en: str("availability_en"),
+    rolePill_uz: str("rolePill_uz"),
+    rolePill_en: str("rolePill_en"),
+    headline_uz: str("headline_uz"),
+    headline_en: str("headline_en"),
+    bio_uz: str("bio_uz"),
+    bio_en: str("bio_en"),
+    about_uz: str("about_uz"),
+    about_en: str("about_en"),
+    email: str("email"),
+    phone: str("phone"),
+    location: str("location"),
+    githubUrl: str("githubUrl"),
+    linkedinUrl: str("linkedinUrl"),
+    telegramUrl: str("telegramUrl"),
+    uptimeStatus: str("uptimeStatus"),
+    pgpKey: str("pgpKey"),
   });
+
+  await prisma.profile.update({ where: { id: "main" }, data: parsed });
+
   revalidatePath("/uz");
   revalidatePath("/en");
   revalidatePath("/uz/about");
   revalidatePath("/en/about");
+  revalidatePath("/uz/contact");
+  revalidatePath("/en/contact");
+  revalidatePath("/rss.xml");
   revalidatePath("/admin/settings");
+  revalidateSite();
 }

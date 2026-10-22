@@ -7,6 +7,8 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {
@@ -30,7 +32,7 @@ export default async function SkillsPage({
   const skills = await getSkills();
 
   return (
-    <div className="space-y-12 py-6">
+    <div className="min-h-screen space-y-16 py-16 sm:py-24">
       <ScrollReveal direction="up">
         <div className="space-y-3">
           <Badge variant="devops" pulse>

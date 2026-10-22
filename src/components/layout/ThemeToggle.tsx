@@ -39,7 +39,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-      className="glass-surface flex h-9 w-9 items-center justify-center rounded-pill text-[var(--ink)] transition hover:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+      className="spatial-ornament flex h-9 w-9 items-center justify-center text-[var(--ink)] transition-all duration-300 hover:border-[var(--accent)] hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
     >
       {theme === "dark" ? (
         <Sun className="h-4 w-4 text-[var(--accent)]" />

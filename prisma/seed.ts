@@ -19,17 +19,7 @@ async function main() {
   // 1. User (Single Admin User with hashed password)
   await prisma.user.upsert({
     where: { email: adminEmail },
-    update: { passwordHash: hashed, name: "Erjigitov Mirhamid (Admin)" },
-    create: {
-      email: adminEmail,
-      name: "Erjigitov Mirhamid (Admin)",
-      passwordHash: hashed,
-    },
-  });
-
-  await prisma.adminUser.upsert({
-    where: { email: adminEmail },
-    update: { passwordHash: hashed, name: "Erjigitov Mirhamid (Admin)" },
+    update: { passwordHash: hashed, name: "Erjigitov Mirhamid (Admin)", role: "SUPERADMIN" },
     create: {
       email: adminEmail,
       name: "Erjigitov Mirhamid (Admin)",
@@ -39,13 +29,6 @@ async function main() {
   });
 
   // 2. Profile (Single row)
-  const socialsJson = JSON.stringify({
-    github: "https://github.com/mirhamid-erjigitov",
-    linkedin: "https://linkedin.com/in/mirhamid-erjigitov",
-    telegram: "https://t.me/mirhamid_erjigitov",
-    phone: "+998 (90) 123-45-67",
-  });
-
   const headlineUz = "AI Muhandis • Kiberxavfsizlik Arxitektori • Senior DevSecOps";
   const headlineEn = "AI Engineer • Cybersecurity Architect • Senior DevSecOps";
   const bioUz =
@@ -74,80 +57,48 @@ async function main() {
     blushColor: "#F2A98C",
   });
 
-  await prisma.profile.upsert({
-    where: { id: "main" },
-    update: {
-      name: "Erjigitov Mirhamid",
-      fullName: "Erjigitov Mirhamid",
-      headline_uz: headlineUz,
-      headline_en: headlineEn,
-      bio_uz: bioUz,
-      bio_en: bioEn,
-      aboutUz,
-      aboutEn,
-      heroLine1_uz: "MIRHAMID",
-      heroLine1_en: "MIRHAMID",
-      heroLine2_uz: "ERJIGITOV *26",
-      heroLine2_en: "ERJIGITOV *26",
-      availability_uz: "Loyihalarga ochiq*",
-      availability_en: "Open to work*",
-      rolePill_uz: "AI • KIBERXAVFSIZLIK • DEVOPS",
-      rolePill_en: "AI • CYBERSECURITY • DEVOPS",
-      specialties_uz: specialtiesUz,
-      specialties_en: specialtiesEn,
-      avatarConfig: avatarConfigJson,
-      socials: socialsJson,
-    },
-    create: {
-      id: "main",
-      name: "Erjigitov Mirhamid",
-      headline_uz: headlineUz,
-      headline_en: headlineEn,
-      bio_uz: bioUz,
-      bio_en: bioEn,
-      heroLine1_uz: "MIRHAMID",
-      heroLine1_en: "MIRHAMID",
-      heroLine2_uz: "ERJIGITOV *26",
-      heroLine2_en: "ERJIGITOV *26",
-      availability_uz: "Loyihalarga ochiq*",
-      availability_en: "Open to work*",
-      rolePill_uz: "AI • KIBERXAVFSIZLIK • DEVOPS",
-      rolePill_en: "AI • CYBERSECURITY • DEVOPS",
-      specialties_uz: specialtiesUz,
-      specialties_en: specialtiesEn,
-      avatarConfig: avatarConfigJson,
-      avatarUrl: "/avatar.svg",
-      cvUrl_uz: "/cv-uz.pdf",
-      cvUrl_en: "/cv-en.pdf",
-      email: "mirhamid@cyberai.dev",
-      location: "Tashkent, Uzbekistan • Remote Worldwide",
-      socials: socialsJson,
-      fullName: "Erjigitov Mirhamid",
-      roleUz: headlineUz,
-      roleEn: headlineEn,
-      bioUz,
-      bioEn,
-      aboutUz,
-      aboutEn,
-      resumeUrlUz: "/cv-uz.pdf",
-      resumeUrlEn: "/cv-en.pdf",
-      phone: "+998 (90) 123-45-67",
-      githubUrl: "https://github.com/mirhamid-erjigitov",
-      linkedinUrl: "https://linkedin.com/in/mirhamid-erjigitov",
-      telegramUrl: "https://t.me/mirhamid_erjigitov",
-      pgpKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
+  const profileData = {
+    name: "Erjigitov Mirhamid",
+    heroLine1_uz: "MIRHAMID",
+    heroLine1_en: "MIRHAMID",
+    heroLine2_uz: "ERJIGITOV *26",
+    heroLine2_en: "ERJIGITOV *26",
+    availability_uz: "Loyihalarga ochiq*",
+    availability_en: "Open to work*",
+    rolePill_uz: "AI • KIBERXAVFSIZLIK • DEVOPS",
+    rolePill_en: "AI • CYBERSECURITY • DEVOPS",
+    headline_uz: headlineUz,
+    headline_en: headlineEn,
+    bio_uz: bioUz,
+    bio_en: bioEn,
+    about_uz: aboutUz,
+    about_en: aboutEn,
+    specialties_uz: specialtiesUz,
+    specialties_en: specialtiesEn,
+    avatarConfig: avatarConfigJson,
+    avatarUrl: "/avatar.svg",
+    cvUrl_uz: "/cv-uz.pdf",
+    cvUrl_en: "/cv-en.pdf",
+    email: "mirhamid@cyberai.dev",
+    phone: "+998 (90) 123-45-67",
+    location: "Tashkent, Uzbekistan • Remote Worldwide",
+    githubUrl: "https://github.com/mirhamid-erjigitov",
+    linkedinUrl: "https://linkedin.com/in/mirhamid-erjigitov",
+    telegramUrl: "https://t.me/mirhamid_erjigitov",
+    pgpKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Erjigitov Mirhamid <mirhamid@cyberai.dev>
 Comment: Fingerprint: 4F9A 82C1 E77B 091D 33A4  98C2 B110 77E5 MIRH A260
 
 mQINBGX9CyberAI0BEAC9x7vK2pL9mN4qR8tW1yZ3aB5cD7eF9gH1iJ3kL5mN7oP9
 =x9Qz
 -----END PGP PUBLIC KEY BLOCK-----`,
-      uptimeStatus: "99.98% • Zero-Trust Verified",
-      yearsExp: 6,
-      projectsCount: 44,
-      certsCount: 12,
-      securityAudits: 88,
-    },
+    uptimeStatus: "99.98% • Zero-Trust Verified",
+  };
+
+  await prisma.profile.upsert({
+    where: { id: "main" },
+    update: profileData,
+    create: { id: "main", ...profileData },
   });
 
   // Clear child tables for idempotent seed
@@ -158,9 +109,7 @@ mQINBGX9CyberAI0BEAC9x7vK2pL9mN4qR8tW1yZ3aB5cD7eF9gH1iJ3kL5mN7oP9
   await prisma.experience.deleteMany();
   await prisma.certificate.deleteMany();
   await prisma.resource.deleteMany();
-  await prisma.talk.deleteMany();
   await prisma.speaking.deleteMany();
-  await prisma.message.deleteMany();
   await prisma.contactMessage.deleteMany();
   await prisma.page.deleteMany();
   await prisma.media.deleteMany();
@@ -420,22 +369,7 @@ mQINBGX9CyberAI0BEAC9x7vK2pL9mN4qR8tW1yZ3aB5cD7eF9gH1iJ3kL5mN7oP9
     },
   });
 
-  // 9. Talk & Speaking
-  await prisma.talk.create({
-    data: {
-      title_uz: "Avtonom AI Agentlar Davrida Kiberxavfsizlik: Hujum va Himoya",
-      title_en: "Cybersecurity in the Era of Autonomous AI Agents: Offense & Defense",
-      description_uz: "LLM agentlar qanday qilib avtonom pentest o'tkazishi va ularga qarshi eBPF + AI Firewall himoyasi.",
-      description_en: "Keynote exploring how autonomous LLM agents transform red-teaming and kernel-level eBPF defenses.",
-      eventName: "Central Asia CyberSec & AI Summit 2026",
-      date: "2026-05-14",
-      location: "Tashkent, Uzbekistan",
-      slidesUrl: "https://speakerdeck.com/cyberai-architect",
-      videoUrl: "https://youtube.com",
-      published: true,
-    },
-  });
-
+  // 9. Speaking
   await prisma.speaking.create({
     data: {
       titleUz: "Avtonom AI Agentlar Davrida Kiberxavfsizlik: Hujum va Himoya",
@@ -468,23 +402,11 @@ mQINBGX9CyberAI0BEAC9x7vK2pL9mN4qR8tW1yZ3aB5cD7eF9gH1iJ3kL5mN7oP9
     data: {
       key: "site_config",
       value: JSON.stringify({
-        seoTitle_uz: "Sardorbek Alimov — AI, Kiberxavfsizlik va DevOps Portfolio",
-        seoTitle_en: "Sardorbek Alimov — AI, Cybersecurity & DevOps Portfolio",
+        seoTitle_uz: "Erjigitov Mirhamid — AI, Kiberxavfsizlik va DevOps Portfolio",
+        seoTitle_en: "Erjigitov Mirhamid — AI, Cybersecurity & DevOps Portfolio",
         telegramNotifications: true,
         emailNotifications: true,
       }),
-    },
-  });
-
-  // 12. Sample Message
-  await prisma.message.create({
-    data: {
-      name: "Alex Mercer (CTO @ FinTech Core)",
-      email: "a.mercer@fintechcore.io",
-      subject: "Enterprise RAG Security Audit & Kubernetes Review",
-      body: "Salom! Bank AI-assistentimiz va Kubernetes infratuzilmamiz uchun Zero-Trust audit bo'yicha hamkorlik qilmoqchimiz.",
-      ip: "127.0.0.1",
-      isRead: false,
     },
   });
 
@@ -497,10 +419,11 @@ mQINBGX9CyberAI0BEAC9x7vK2pL9mN4qR8tW1yZ3aB5cD7eF9gH1iJ3kL5mN7oP9
       message: "Salom! Bank AI-assistentimiz va Kubernetes infratuzilmamiz uchun Zero-Trust audit bo'yicha hamkorlik qilmoqchimiz.",
       encrypted: true,
       isRead: false,
+      ip: "127.0.0.1",
     },
   });
 
-  console.log("✅ Stage 1 Seed completed: All 14 Section-6 models populated with hashed admin user!");
+  console.log("✅ Stage 1 Seed completed: All models populated with hashed admin user!");
 }
 
 main()

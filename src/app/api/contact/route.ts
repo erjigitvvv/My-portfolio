@@ -1,39 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/db";
-import { contactSchema } from "@/lib/validators";
-import { sendContactNotification } from "@/lib/notify";
+import { processContactSubmission } from "@/lib/contact-service";
+import { getClientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  let body: unknown;
   try {
-    const body = await req.json();
-    const parsed = contactSchema.safeParse(body);
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
+  }
 
-    if (!parsed.success) {
+  try {
+    const result = await processContactSubmission(body, getClientIp(req.headers));
+
+    if (!result.ok) {
       return NextResponse.json(
+        { ok: false, error: result.error },
         {
-          ok: false,
-          error: parsed.error.issues[0]?.message || "Validation error",
-        },
-        { status: 400 }
+          status: result.status,
+          headers: result.retryAfterSeconds
+            ? { "Retry-After": String(result.retryAfterSeconds) }
+            : undefined,
+        }
       );
     }
-
-    const saved = await prisma.contactMessage.create({
-      data: parsed.data,
-    });
-
-    const notifyResult = await sendContactNotification(parsed.data);
-
-    return NextResponse.json({
-      ok: true,
-      id: saved.id,
-      telegramSent: notifyResult.telegramSent,
-    });
+    return NextResponse.json({ ok: true, id: result.id, telegramSent: result.telegramSent ?? false });
   } catch (error) {
     console.error("Contact API error:", error);
-    return NextResponse.json(
-      { ok: false, error: "Server error processing message" },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: "Server error processing message" }, { status: 500 });
   }
 }

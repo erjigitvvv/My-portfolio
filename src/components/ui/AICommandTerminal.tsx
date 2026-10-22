@@ -198,20 +198,22 @@ export function AICommandTerminal({
       {/* Floating bottom-right trigger button (sits above mobile bottom dock on <lg screens) */}
       <button
         onClick={() => setIsOpen(true)}
-        className="clear-liquid-glass liquid-shimmer-sweep fixed bottom-24 right-4 z-40 flex items-center gap-2 rounded-2xl border border-emerald-400/45 bg-slate-950/85 px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs font-mono text-emerald-300 shadow-[0_0_30px_rgba(0,245,212,0.28)] backdrop-blur-xl transition-all hover:scale-105 hover:border-emerald-400 lg:bottom-6 lg:right-6"
+        className="spatial-ornament liquid-card-sheen fixed bottom-24 right-4 z-40 flex items-center gap-2.5 rounded-pill px-4 py-2.5 text-xs font-mono text-[var(--ink)] shadow-[0_16px_36px_-6px_rgba(61,190,116,0.32)] backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:border-[var(--accent)] active:scale-95 lg:bottom-6 lg:right-6"
       >
-        <Sparkles className="h-4 w-4 text-emerald-400 animate-pulse shrink-0" />
-        <span className="hidden xs:inline sm:inline">AI Agent & CLI</span>
-        <kbd className="hidden sm:inline-block rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-slate-300">
-          Ctrl+K
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)]/20 text-[var(--accent-text)]">
+          <Sparkles className="h-3 w-3 animate-pulse" />
+        </span>
+        <span className="hidden xs:inline sm:inline font-semibold">AI Agent & CLI</span>
+        <kbd className="hidden sm:inline-block rounded-full bg-[var(--ink)]/10 px-2 py-0.5 text-[10px] font-bold text-[var(--ink)]">
+          ⌘K
         </kbd>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-md">
-          <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/20 bg-slate-900/90 shadow-[0_25px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+          <div className="spatial-glass liquid-card-sheen relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/30 shadow-[0_36px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl">
             {/* Top Bar */}
-            <div className="flex items-center justify-between border-b border-white/10 bg-slate-950/60 px-5 py-3.5">
+            <div className="flex items-center justify-between border-b border-white/10 bg-black/20 px-5 py-3.5">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setMode("ai")}

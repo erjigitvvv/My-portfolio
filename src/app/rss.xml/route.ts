@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getPosts, getProfile } from "@/lib/queries";
 
+export const revalidate = 3600;
+
+const esc = (v: string) =>
+  v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 export async function GET() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const [posts, profile] = await Promise.all([getPosts(true), getProfile()]);
@@ -14,7 +19,7 @@ export async function GET() {
       <guid>${siteUrl}/en/blog/${post.slug}</guid>
       <pubDate>${new Date(post.createdAt).toUTCString()}</pubDate>
       <description><![CDATA[${post.excerptEn}]]></description>
-      <category>${post.category}</category>
+      <category>${esc(post.category)}</category>
     </item>`
     )
     .join("");
@@ -22,9 +27,9 @@ export async function GET() {
   const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   <channel>
-    <title>${profile.fullName} // Engineering &amp; Security Blog</title>
+    <title>${esc(profile.name)} // Engineering &amp; Security Blog</title>
     <link>${siteUrl}</link>
-    <description>${profile.bioEn}</description>
+    <description>${esc(profile.bio_en)}</description>
     <language>en-us</language>
     ${itemsXml}
   </channel>

@@ -42,32 +42,32 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="w-full lg:w-64 shrink-0">
-      <div className="sticky top-6 rounded-2xl border border-white/15 bg-slate-900/75 p-4 backdrop-blur-2xl shadow-2xl space-y-6">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-400/40 bg-emerald-500/15">
-              <Shield className="h-5 w-5 text-emerald-400" />
+    <aside className="w-full lg:w-72 shrink-0">
+      <div className="sticky top-6 clay-card p-5 sm:p-6 space-y-6">
+        <div className="flex items-center justify-between border-b border-[var(--line)]/60 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--accent)]/40 bg-[var(--accent)]/15 text-[var(--accent-text)]">
+              <Shield className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-mono text-xs font-bold text-white">
+              <p className="font-mono text-xs font-bold text-[var(--ink)]">
                 ROOT COMMAND
               </p>
-              <p className="font-mono text-[10px] text-emerald-400">
+              <p className="font-mono text-[10px] text-[var(--accent-text)]">
                 CMS // SECOPS
               </p>
             </div>
           </div>
           <Link
             href="/uz"
-            className="rounded-lg border border-white/10 p-1.5 text-slate-400 hover:text-white"
+            className="liquid-icon-badge h-9 w-9 text-[var(--ink)]"
             title="View Public Site"
           >
             <ExternalLink className="h-4 w-4" />
           </Link>
         </div>
 
-        <nav className="space-y-1">
+        <nav className="space-y-1.5">
           {links.map((item) => {
             const Icon = item.icon;
             const active =
@@ -79,23 +79,29 @@ export function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 font-mono text-xs transition ${
+                className={`flex items-center gap-3 rounded-2xl px-3.5 py-3 font-mono text-xs transition-all ${
                   active
-                    ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/35 font-semibold"
-                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-[var(--accent)] font-bold text-[#0B0B0B] shadow-[0_8px_20px_rgba(61,190,116,0.35)] scale-[1.02]"
+                    : "text-[var(--ink)] hover:bg-[var(--ink)]/5"
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-xl ${
+                    active ? "bg-[#0B0B0B]/15 text-[#0B0B0B]" : "liquid-icon-badge text-[var(--accent-text)]"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                </span>
                 <span>{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="border-t border-white/10 pt-4">
+        <div className="border-t border-[var(--line)]/60 pt-4">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2.5 font-mono text-xs text-rose-300 transition hover:bg-rose-500/20"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 font-mono text-xs font-semibold text-rose-500 dark:text-rose-300 transition hover:bg-rose-500/20"
           >
             <LogOut className="h-4 w-4" />
             <span>Terminate Session</span>

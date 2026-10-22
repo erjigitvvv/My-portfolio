@@ -8,7 +8,7 @@ import { Badge, getCategoryBadgeVariant } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: re-generated hourly or instantly via revalidatePath
 
 export async function generateMetadata({
   params,

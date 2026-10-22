@@ -7,7 +7,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge, getCategoryBadgeVariant } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: re-generated hourly or instantly via revalidatePath
 
 export async function generateMetadata({
   params,
@@ -32,7 +32,7 @@ export default async function CertificatesPage({
   const certificates = await getCertificates();
 
   return (
-    <div className="space-y-10 py-6">
+    <div className="min-h-screen space-y-16 py-16 sm:py-24">
       <ScrollReveal direction="up">
         <div className="space-y-3">
           <Badge variant="cyber" pulse>

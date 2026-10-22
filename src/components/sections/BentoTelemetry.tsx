@@ -107,7 +107,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
                 <button
                   key={sample}
                   onClick={() => handleQuickPrompt(sample)}
-                  className="clear-liquid-glass inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-left font-mono text-xs text-[var(--ink)] transition hover:border-[var(--accent)]"
+                  className="spatial-glass inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-left font-mono text-xs text-[var(--ink)] transition hover:border-[var(--accent)]"
                 >
                   <Zap className="h-3.5 w-3.5 text-violet-400 shrink-0" />
                   <span>{sample}</span>
@@ -136,7 +136,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
                   ? "Test the AI Sandbox with a technical question..."
                   : "Texnik savol yozib AI Sandboxni sinab ko'ring..."
               }
-              className="clear-liquid-glass w-full rounded-xl px-3.5 py-2.5 font-mono text-xs text-[var(--ink)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+              className="spatial-glass w-full rounded-xl px-3.5 py-2.5 font-mono text-xs text-[var(--ink)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
             />
             <button
               type="submit"
@@ -189,7 +189,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
             ].map((item) => (
               <div
                 key={item.label}
-                className="clear-liquid-glass flex items-center justify-between gap-2 rounded-xl px-3.5 py-2.5"
+                className="spatial-glass flex items-center justify-between gap-2 rounded-xl px-3.5 py-2.5"
               >
                 <span className="text-slate-700 dark:text-slate-300 truncate">
                   {item.label}
@@ -218,7 +218,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
-            <div className="clear-liquid-glass rounded-2xl p-3.5">
+            <div className="spatial-glass rounded-2xl p-3.5">
               <div className="flex items-center justify-between">
                 <p className="text-[11px] text-[var(--muted)]">CLUSTER UPTIME</p>
                 <Gauge className="h-3.5 w-3.5 text-emerald-400" />
@@ -228,7 +228,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
               </p>
               <p className="text-[10px] text-[var(--muted)]">Multi-Region HA</p>
             </div>
-            <div className="clear-liquid-glass rounded-2xl p-3.5">
+            <div className="spatial-glass rounded-2xl p-3.5">
               <div className="flex items-center justify-between">
                 <p className="text-[11px] text-[var(--muted)]">GPU INFERENCE</p>
                 <Cpu className="h-3.5 w-3.5 text-violet-400" />
@@ -238,7 +238,7 @@ export function BentoTelemetry({ locale }: { locale: string }) {
               </p>
               <p className="text-[10px] text-[var(--muted)]">vLLM PagedAttn</p>
             </div>
-            <div className="clear-liquid-glass rounded-2xl p-3.5">
+            <div className="spatial-glass rounded-2xl p-3.5">
               <div className="flex items-center justify-between">
                 <p className="text-[11px] text-[var(--muted)]">DEPLOYS / WK</p>
                 <Zap className="h-3.5 w-3.5 text-blue-400" />

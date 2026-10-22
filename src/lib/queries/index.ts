@@ -1,92 +1,54 @@
+import type { Profile } from "@prisma/client";
 import prisma from "../db";
 
-export async function getProfile() {
+/**
+ * Used only when the DB row is missing/unreachable. Reading data must never
+ * write to the database, so there is no lazy `create` here any more -
+ * run `npm run db:seed` to create the real profile row.
+ */
+const FALLBACK_PROFILE: Profile = {
+  id: "main",
+  name: "Erjigitov Mirhamid",
+  heroLine1_uz: "MIRHAMID",
+  heroLine1_en: "MIRHAMID",
+  heroLine2_uz: "ERJIGITOV *26",
+  heroLine2_en: "ERJIGITOV *26",
+  availability_uz: "Loyihalarga ochiq*",
+  availability_en: "Open to work*",
+  rolePill_uz: "AI • KIBERXAVFSIZLIK • DEVOPS",
+  rolePill_en: "AI • CYBERSECURITY • DEVOPS",
+  headline_uz: "AI Muhandis • Kiberxavfsizlik Arxitektori • Senior DevSecOps",
+  headline_en: "AI Engineer • Cybersecurity Architect • Senior DevSecOps",
+  bio_uz:
+    "Avtonom AI agentlar, Zero-Trust tarmoq himoyasi va yuqori yuklamali Kubernetes bulutli infratuzilmalarini loyihalovchi muhandis.",
+  bio_en:
+    "Engineering autonomous AI agents, Zero-Trust security architectures, and mission-critical Kubernetes cloud infrastructure at scale.",
+  about_uz: "AI muhandisligi, Kiberxavfsizlik va DevSecOps bo'yicha 6+ yillik tajriba.",
+  about_en: "6+ years of experience across AI Engineering, Cybersecurity, and DevSecOps.",
+  specialties_uz: "[]",
+  specialties_en: "[]",
+  avatarConfig: "{}",
+  avatarUrl: "/avatar.svg",
+  cvUrl_uz: "/cv-uz.pdf",
+  cvUrl_en: "/cv-en.pdf",
+  email: "mirhamid@cyberai.dev",
+  phone: "",
+  location: "Tashkent, Uzbekistan",
+  githubUrl: "",
+  linkedinUrl: "",
+  telegramUrl: "",
+  pgpKey: "",
+  uptimeStatus: "99.98% • Zero-Trust Active",
+  updatedAt: new Date(0),
+};
+
+export async function getProfile(): Promise<Profile> {
   try {
-    let profile = await prisma.profile.findUnique({ where: { id: "main" } });
-    if (!profile) {
-      const headlineUz = "AI Muhandis • Kiberxavfsizlik Arxitektori • Senior DevSecOps";
-      const headlineEn = "AI Engineer • Cybersecurity Architect • Senior DevSecOps";
-      const bioUz =
-        "Avtonom AI agentlar, Zero-Trust tarmoq himoyasi va yuqori yuklamali Kubernetes bulutli infratuzilmalarini loyihalovchi muhandis.";
-      const bioEn =
-        "Engineering autonomous AI agents, Zero-Trust security architectures, and mission-critical Kubernetes cloud infrastructure at scale.";
-      profile = await prisma.profile.create({
-        data: {
-          id: "main",
-          name: "Erjigitov Mirhamid",
-          heroLine1_uz: "MIRHAMID",
-          heroLine1_en: "MIRHAMID",
-          heroLine2_uz: "ERJIGITOV *26",
-          heroLine2_en: "ERJIGITOV *26",
-          headline_uz: headlineUz,
-          headline_en: headlineEn,
-          bio_uz: bioUz,
-          bio_en: bioEn,
-          email: "mirhamid@cyberai.dev",
-          location: "Tashkent, Uzbekistan • Remote Worldwide",
-          socials: JSON.stringify({
-            github: "https://github.com/mirhamid-erjigitov",
-            linkedin: "https://linkedin.com/in/mirhamid-erjigitov",
-            telegram: "https://t.me/mirhamid_erjigitov",
-          }),
-          fullName: "Erjigitov Mirhamid",
-          roleUz: headlineUz,
-          roleEn: headlineEn,
-          bioUz,
-          bioEn,
-          aboutUz: bioUz,
-          aboutEn: bioEn,
-          phone: "+998 (90) 123-45-67",
-          githubUrl: "https://github.com/mirhamid-erjigitov",
-          linkedinUrl: "https://linkedin.com/in/mirhamid-erjigitov",
-          telegramUrl: "https://t.me/mirhamid_erjigitov",
-          pgpKey: "4F9A 82C1 E77B 091D 33A4 98C2 B110 77E5 MIRH A260",
-        },
-      });
-    }
-    return profile;
+    const profile = await prisma.profile.findUnique({ where: { id: "main" } });
+    return profile ?? FALLBACK_PROFILE;
   } catch (error) {
     console.error("getProfile error:", error);
-    return {
-      id: "main",
-      name: "Erjigitov Mirhamid",
-      heroLine1_uz: "MIRHAMID",
-      heroLine1_en: "MIRHAMID",
-      heroLine2_uz: "ERJIGITOV *26",
-      heroLine2_en: "ERJIGITOV *26",
-      headline_uz: "AI Muhandis • Kiberxavfsizlik Arxitektori • Senior DevSecOps",
-      headline_en: "AI Engineer • Cybersecurity Architect • Senior DevSecOps",
-      bio_uz:
-        "Avtonom AI agentlar, Zero-Trust tarmoq himoyasi va yuqori yuklamali Kubernetes bulutli infratuzilmalarini loyihalovchi muhandis.",
-      bio_en:
-        "Engineering autonomous AI agents, Zero-Trust security architectures, and mission-critical Kubernetes cloud infrastructure at scale.",
-      avatarUrl: "/avatar.svg",
-      cvUrl_uz: "/cv-uz.pdf",
-      cvUrl_en: "/cv-en.pdf",
-      email: "mirhamid@cyberai.dev",
-      location: "Tashkent, Uzbekistan",
-      socials: "{}",
-      fullName: "Erjigitov Mirhamid",
-      roleUz: "AI Muhandis • Kiberxavfsizlik Arxitektori • Senior DevSecOps",
-      roleEn: "AI Engineer • Cybersecurity Architect • Senior DevSecOps",
-      bioUz: "Avtonom AI agentlar va Zero-Trust xavfsizlik arxitekturasi.",
-      bioEn: "Autonomous AI agents and Zero-Trust security architecture.",
-      aboutUz: "AI muhandisligi, Kiberxavfsizlik va DevSecOps bo'yicha 6+ yillik tajriba.",
-      aboutEn: "6+ years of experience across AI Engineering, Cybersecurity, and DevSecOps.",
-      resumeUrlUz: "/cv-uz.pdf",
-      resumeUrlEn: "/cv-en.pdf",
-      phone: "+998 (90) 123-45-67",
-      githubUrl: "https://github.com/mirhamid-erjigitov",
-      linkedinUrl: "https://linkedin.com/in/mirhamid-erjigitov",
-      telegramUrl: "https://t.me/mirhamid_erjigitov",
-      pgpKey: "4F9A 82C1 E77B 091D 33A4 98C2 B110 77E5 MIRH A260",
-      uptimeStatus: "99.98% • Zero-Trust Active",
-      yearsExp: 6,
-      projectsCount: 44,
-      certsCount: 12,
-      securityAudits: 88,
-      updatedAt: new Date(),
-    };
+    return FALLBACK_PROFILE;
   }
 }
 

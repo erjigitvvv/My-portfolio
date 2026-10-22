@@ -35,7 +35,7 @@ import { Badge, getCategoryBadgeVariant } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: re-generated hourly or instantly via revalidatePath
 
 export default async function HomePage({
   params,
@@ -57,22 +57,22 @@ export default async function HomePage({
     ]);
 
   return (
-    <div className="space-y-14 sm:space-y-20 pb-12">
-      {/* 1. Hero Section */}
+    <div className="space-y-28 sm:space-y-40 pb-32 overflow-visible">
+      {/* 1. Full-Height Hero Section (min-h-screen) */}
       <ScrollReveal direction="up">
         <Hero profile={profile} locale={locale} />
       </ScrollReveal>
 
-      {/* 2. Live Telemetry Bento Grid */}
+      {/* 2. Live Telemetry Bento Grid (min-h-[85vh]) */}
       <ScrollReveal direction="up" delay={0.05}>
-        <div id="telemetry" className="scroll-mt-24">
+        <div id="telemetry" className="scroll-mt-24 min-h-[85vh] lg:min-h-screen flex flex-col justify-center py-20 sm:py-28 overflow-visible">
           <BentoTelemetry locale={locale} />
         </div>
       </ScrollReveal>
 
-      {/* 3. Featured Architecture Case Studies */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <section id="projects" className="scroll-mt-24 space-y-6">
+      {/* 3. Featured Architecture Case Studies (min-h-screen, py-32) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <section id="projects" className="scroll-mt-24 min-h-screen flex flex-col justify-center py-24 sm:py-32 md:py-36 space-y-8 overflow-visible">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="flex items-start gap-3.5">
               <span className="liquid-icon-badge mt-1 h-11 w-11 shrink-0 text-[var(--accent)]">
@@ -82,7 +82,7 @@ export default async function HomePage({
                 <Badge variant="ai" className="mb-2">
                   PRODUCTION ARCHITECTURES // CASE STUDIES
                 </Badge>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-4xl">
                   {dict.sections.featuredProjects}
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -102,9 +102,9 @@ export default async function HomePage({
         </section>
       </ScrollReveal>
 
-      {/* 4. Engineering Stack & Tech Radar */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <section id="skills" className="scroll-mt-24 space-y-6">
+      {/* 4. Engineering Stack & Tech Radar (min-h-screen, py-32) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <section id="skills" className="scroll-mt-24 min-h-screen flex flex-col justify-center py-24 sm:py-32 md:py-36 space-y-8 overflow-visible">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="flex items-start gap-3.5">
               <span className="liquid-icon-badge mt-1 h-11 w-11 shrink-0 text-sky-400">
@@ -114,7 +114,7 @@ export default async function HomePage({
                 <Badge variant="devops" className="mb-2">
                   TECH RADAR // AI • SEC • OPS
                 </Badge>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-4xl">
                   {dict.sections.skillsTitle}
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -134,9 +134,9 @@ export default async function HomePage({
         </section>
       </ScrollReveal>
 
-      {/* 5. Experience & Education Timeline */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <section id="timeline" className="scroll-mt-24 space-y-6">
+      {/* 5. Experience & Education Timeline (min-h-screen, py-32) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <section id="timeline" className="scroll-mt-24 min-h-screen flex flex-col justify-center py-24 sm:py-32 md:py-36 space-y-8 overflow-visible">
           <div className="flex items-start gap-3.5">
             <span className="liquid-icon-badge mt-1 h-11 w-11 shrink-0 text-emerald-400">
               <Briefcase className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default async function HomePage({
               <Badge variant="cyber" className="mb-2">
                 CAREER CHRONOLOGY // ENTERPRISE TRACK
               </Badge>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-4xl">
                 {dict.sections.timelineTitle}
               </h2>
               <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -158,9 +158,9 @@ export default async function HomePage({
         </section>
       </ScrollReveal>
 
-      {/* 6. Engineering Blog & CTF Security Write-ups */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <section id="blog" className="scroll-mt-24 space-y-6">
+      {/* 6. Engineering Blog & CTF Security Write-ups (min-h-screen, py-32) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <section id="blog" className="scroll-mt-24 min-h-screen flex flex-col justify-center py-24 sm:py-32 md:py-36 space-y-8 overflow-visible">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="flex items-start gap-3.5">
               <span className="liquid-icon-badge mt-1 h-11 w-11 shrink-0 text-violet-400">
@@ -170,7 +170,7 @@ export default async function HomePage({
                 <Badge variant="ai" className="mb-2">
                   RESEARCH & CTF WRITE-UPS
                 </Badge>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-4xl">
                   {dict.sections.latestPosts}
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -246,114 +246,116 @@ export default async function HomePage({
         </section>
       </ScrollReveal>
 
-      {/* 7. Certificates & Speaking Preview Dual Row */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <section className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
-          <GlassCard variant="cyber" className="space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5">
-                <span className="liquid-icon-badge h-9 w-9 text-emerald-400">
-                  <Award className="h-4 w-4" />
-                </span>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                  {dict.sections.certsTitle}
-                </h3>
-              </div>
-              <Link
-                href={`/${locale}/certificates`}
-                className="font-mono text-xs text-emerald-400 hover:underline shrink-0"
-              >
-                {dict.sections.viewAll} →
-              </Link>
-            </div>
-            <div className="space-y-2.5">
-              {certificates.slice(0, 4).map((cert) => (
-                <div
-                  key={cert.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5"
-                >
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                      {localizeField(cert, "title", locale)}
-                    </p>
-                    <p className="font-mono text-xs text-slate-400">
-                      {cert.issuer} • {cert.issueDate}
-                    </p>
-                  </div>
-                  <div className="self-start sm:self-auto shrink-0">
-                    <Badge variant="cyber">{cert.credentialId}</Badge>
-                  </div>
+      {/* 7. Certificates & Speaking Dual Section (min-h-screen, py-32) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <section className="min-h-screen flex flex-col justify-center py-24 sm:py-32 md:py-36 overflow-visible">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <GlassCard variant="cyber" className="space-y-4">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="liquid-icon-badge h-9 w-9 text-emerald-400">
+                    <Award className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                    {dict.sections.certsTitle}
+                  </h3>
                 </div>
-              ))}
-            </div>
-          </GlassCard>
+                <Link
+                  href={`/${locale}/certificates`}
+                  className="font-mono text-xs text-emerald-400 hover:underline shrink-0"
+                >
+                  {dict.sections.viewAll} →
+                </Link>
+              </div>
+              <div className="space-y-2.5">
+                {certificates.slice(0, 4).map((cert) => (
+                  <div
+                    key={cert.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 spatial-glass rounded-2xl px-3.5 py-2.5"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                        {localizeField(cert, "title", locale)}
+                      </p>
+                      <p className="font-mono text-xs text-slate-400">
+                        {cert.issuer} • {cert.issueDate}
+                      </p>
+                    </div>
+                    <div className="self-start sm:self-auto shrink-0">
+                      <Badge variant="cyber">{cert.credentialId}</Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
 
-          <GlassCard variant="ai" className="space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5">
-                <span className="liquid-icon-badge h-9 w-9 text-violet-400">
-                  <Mic className="h-4 w-4" />
-                </span>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                  {dict.sections.speakingTitle}
-                </h3>
-              </div>
-              <Link
-                href={`/${locale}/speaking`}
-                className="font-mono text-xs text-violet-300 hover:underline shrink-0"
-              >
-                {dict.sections.viewAll} →
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {speakings.map((talk) => (
-                <div
-                  key={talk.id}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] p-3.5 sm:p-4 space-y-1.5"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Badge variant="ai">{talk.type}</Badge>
-                    <span className="font-mono text-xs text-slate-400 flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-violet-400" /> {talk.date} • {talk.location}
-                    </span>
-                  </div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    {localizeField(talk, "title", locale)}
-                  </p>
-                  <p className="text-xs text-emerald-400 font-mono">
-                    {localizeField(talk, "event", locale)}
-                  </p>
+            <GlassCard variant="ai" className="space-y-4">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="liquid-icon-badge h-9 w-9 text-violet-400">
+                    <Mic className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                    {dict.sections.speakingTitle}
+                  </h3>
                 </div>
-              ))}
-            </div>
-          </GlassCard>
+                <Link
+                  href={`/${locale}/speaking`}
+                  className="font-mono text-xs text-violet-300 hover:underline shrink-0"
+                >
+                  {dict.sections.viewAll} →
+                </Link>
+              </div>
+              <div className="space-y-3">
+                {speakings.map((talk) => (
+                  <div
+                    key={talk.id}
+                    className="spatial-glass rounded-2xl p-3.5 sm:p-4 space-y-1.5"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Badge variant="ai">{talk.type}</Badge>
+                      <span className="font-mono text-xs text-slate-400 flex items-center gap-1">
+                        <Calendar className="h-3 w-3 text-violet-400" /> {talk.date} • {talk.location}
+                      </span>
+                    </div>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">
+                      {localizeField(talk, "title", locale)}
+                    </p>
+                    <p className="text-xs text-emerald-400 font-mono">
+                      {localizeField(talk, "event", locale)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
         </section>
       </ScrollReveal>
 
-      {/* 8. Encrypted Contact Call-to-Action Banner */}
-      <ScrollReveal direction="up" delay={0.05}>
-        <div id="contact" className="scroll-mt-24">
+      {/* 8. Encrypted Contact Call-to-Action Banner (min-h-[70vh]) */}
+      <ScrollReveal direction="up" delay={0.08}>
+        <div id="contact" className="scroll-mt-24 min-h-[70vh] flex flex-col justify-center py-20 sm:py-28 overflow-visible">
           <GlassCard
             variant="cyber"
             glow
             padding="lg"
-            className="text-center space-y-4 border-emerald-400/35"
+            className="text-center space-y-6 border-emerald-400/35 p-10 sm:p-14"
           >
-            <div className="mx-auto flex h-12 w-12 items-center justify-center">
-              <span className="liquid-icon-badge h-12 w-12 text-emerald-400">
-                <ShieldCheck className="h-6 w-6" />
+            <div className="mx-auto flex h-14 w-14 items-center justify-center">
+              <span className="liquid-icon-badge h-14 w-14 text-emerald-400">
+                <ShieldCheck className="h-7 w-7" />
               </span>
             </div>
             <Badge variant="live" pulse>
               PGP ENCRYPTED CHANNEL // TELEGRAM WEBHOOK ACTIVE
             </Badge>
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white sm:text-5xl">
               {dict.sections.contactTitle}
             </h2>
-            <p className="mx-auto max-w-2xl text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               {dict.sections.contactSub}
             </p>
-            <div className="pt-2 flex flex-wrap justify-center gap-3">
+            <div className="pt-4 flex flex-wrap justify-center gap-4">
               <Link href={`/${locale}/contact`}>
                 <Button variant="primary" size="lg">
                   <ShieldCheck className="h-4 w-4" />
@@ -373,4 +375,3 @@ export default async function HomePage({
     </div>
   );
 }
-

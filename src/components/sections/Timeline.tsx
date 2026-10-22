@@ -52,11 +52,11 @@ export function Timeline({
                       CURRENT
                     </Badge>
                   )}
-                  <span className="clear-liquid-glass inline-flex items-center gap-1 rounded-pill px-2.5 py-1 font-mono text-[11px] text-[var(--muted)]">
+                  <span className="spatial-ornament inline-flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] text-[var(--muted)]">
                     <Calendar className="h-3 w-3 text-[var(--accent-text)]" />{" "}
                     {exp.period}
                   </span>
-                  <span className="clear-liquid-glass inline-flex items-center gap-1 rounded-pill px-2.5 py-1 font-mono text-[11px] text-[var(--muted)]">
+                  <span className="spatial-ornament inline-flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] text-[var(--muted)]">
                     <MapPin className="h-3 w-3 text-violet-400" /> {exp.location}
                   </span>
                 </div>
@@ -70,7 +70,7 @@ export function Timeline({
                 {exp.technologies.split(",").map((tech: string) => (
                   <span
                     key={tech}
-                    className="clear-liquid-glass rounded-lg px-2.5 py-0.5 font-mono text-[10px] sm:text-[11px] text-[var(--ink)]"
+                    className="spatial-glass rounded-lg px-2.5 py-0.5 font-mono text-[10px] sm:text-[11px] text-[var(--ink)]"
                   >
                     {tech.trim()}
                   </span>

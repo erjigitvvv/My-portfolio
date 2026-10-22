@@ -5,6 +5,8 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {

@@ -1,13 +1,35 @@
 import { z } from "zod";
 
+// Fields used only for anti-spam; they are stripped before anything touches the DB.
 export const contactSchema = z.object({
-  name: z.string().min(2, "Ism kamida 2 ta belgidan iborat bo'lishi kerak"),
-  email: z.string().email("To'g'ri email manzil kiriting"),
-  subject: z.string().min(3, "Mavzu kamida 3 ta belgidan iborat bo'lishi kerak"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Ism kamida 2 ta belgidan iborat bo'lishi kerak")
+    .max(100, "Ism juda uzun (max 100)"),
+  email: z
+    .string()
+    .trim()
+    .email("To'g'ri email manzil kiriting")
+    .max(200, "Email juda uzun"),
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Mavzu kamida 3 ta belgidan iborat bo'lishi kerak")
+    .max(200, "Mavzu juda uzun (max 200)"),
   category: z.enum(["PROJECT", "SECURITY_AUDIT", "AI_CONSULTING", "SPEAKING"]).default("PROJECT"),
-  message: z.string().min(10, "Xabar matni kamida 10 ta belgidan iborat bo'lishi kerak"),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Xabar matni kamida 10 ta belgidan iborat bo'lishi kerak")
+    .max(5000, "Xabar juda uzun (max 5000)"),
   encrypted: z.boolean().optional().default(false),
+  // --- anti-spam (never persisted) ---
+  website: z.string().optional().default(""), // honeypot: real users leave it empty
+  formStartedAt: z.number().optional(), // epoch ms when the form was rendered
 });
+
+export type ContactInput = z.infer<typeof contactSchema>;
 
 export const projectSchema = z.object({
   slug: z.string().min(3),
@@ -50,6 +72,32 @@ export const skillSchema = z.object({
   icon: z.string().default("Cpu"),
   descriptionUz: z.string().min(5),
   descriptionEn: z.string().min(5),
+});
+
+export const profileSchema = z.object({
+  name: z.string().trim().min(2),
+  heroLine1_uz: z.string().trim().min(1).max(40),
+  heroLine1_en: z.string().trim().min(1).max(40),
+  heroLine2_uz: z.string().trim().min(1).max(40),
+  heroLine2_en: z.string().trim().min(1).max(40),
+  availability_uz: z.string().trim().min(1).max(60),
+  availability_en: z.string().trim().min(1).max(60),
+  rolePill_uz: z.string().trim().min(1).max(80),
+  rolePill_en: z.string().trim().min(1).max(80),
+  headline_uz: z.string().trim().min(2),
+  headline_en: z.string().trim().min(2),
+  bio_uz: z.string().trim().min(2),
+  bio_en: z.string().trim().min(2),
+  about_uz: z.string().trim().default(""),
+  about_en: z.string().trim().default(""),
+  email: z.string().trim().email(),
+  phone: z.string().trim().default(""),
+  location: z.string().trim().min(2),
+  githubUrl: z.string().trim().default(""),
+  linkedinUrl: z.string().trim().default(""),
+  telegramUrl: z.string().trim().default(""),
+  uptimeStatus: z.string().trim().default(""),
+  pgpKey: z.string().trim().default(""),
 });
 
 export const certificateSchema = z.object({
